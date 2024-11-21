@@ -8,3 +8,17 @@ $C_j$ is the catchment population for hospital $j$, where $m$ is the total numbe
 $x_{ij}$ is the count of patients with a mailing address in ZCTA $i$ discharged from hospital $j$ for disease $D$ over a specified span of time $Q$. <br/>
 $T_i = \sum_{j=1}^m x_{ij}$ is the total patients originating in ZCTA $i$ that went to any hospital. <br/>
 $P_i$ is the ZCTA population estimate from the 5-year American Community Survey 2018-2022 obtained from [tidycensus](https://walker-data.com/tidycensus/). <br/>
+
+
+### Example Data Table for Calculating $C_j$
+
+| **ZCTA $i$** | **Hospital $j$** | **$x_{ij}$** | **$T_i = \sum_{j=1}^m x_{ij}$** | **$P_i$** | **Contribution to $C_j$** |
+|---------------------|------------------------|------------------|--------------------------------------|--------------|----------------------------------------|
+| 1                   | 1                      | 100              | 100                                  | 1000         | $\frac{100}{100} \cdot 1000 = 1000$    |
+| 2                   | 1                      | 50               | 100                                  | 500          | $\frac{50}{100} \cdot 500 = 250$       |
+| 2                   | 2                      | 50               | 100                                  | 500          | $\frac{50}{100} \cdot 500 = 250$       |
+
+### Calculated $C_j$ Values:
+- $C_1 = 1000 + 250 = 1250$
+- $C_2 = 250$
+
