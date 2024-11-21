@@ -3,7 +3,7 @@ We estimate a hospital's population catchment as the proportion of the populatio
 
 $$C_j = \sum_{i=1}^n \left(\frac{x_{ij}}{T_i} \cdot P_i\right)$$ (1)
 
-$C_j$ is the catchment population for hospital $j$, where $m$ is the total number of hospitals in Texas receiving patients for a specific disease $D$ and $n$ is the total number of ZCTAs that sent patients to any of the $m$ hospitals. 
+$C_j$ is the catchment population for hospital $j$, where $m$ is the total number of hospitals in Texas receiving patients for a specific disease $D$ and $n$ is the total number of ZCTAs that sent patients to any of the $m$ hospitals. <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;For example, COVID-19 has the ICD-10-CM code U071, so we consider all patients with U071 as their principal diagnosis and any who had U071 present on admittance (secondary diagnosis). <br/>
 $x_{ij}$ is the count of patients with a mailing address in ZCTA $i$ discharged from hospital $j$ for disease $D$ over a specified span of time $Q$. <br/>
 $T_i = \sum_{j=1}^m x_{ij}$ is the total patients originating in ZCTA $i$ that went to any hospital. <br/>
