@@ -1,0 +1,16 @@
+ICD10_CODE,CODE_STARTS_WITH,ICD10_3CHAR_SUBSTRING,DESCRIP,DISEASE_CAT,START_YEAR,START_QUARTER,SOURCE
+J1282,F,J12,Pneumonia due to coronavirus disease 2019,COV,2019,4,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+U071,F,U07,COVID-19,COV,2019,4,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J09,T,J09,Influenza due to certain identified influenza viruses,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J10,T,J10,Influenza due to other identified influenza viruses,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J11,T,J11,Influenza due to unidentified influenza virus,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+B974,F,B97,Respiratory syncytial virus (RSV) as the cause of diseases classified elsewhere,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J121,F,J12,Respiratory syncytial virus pneumonia,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J205,F,J20,Acute bronchitis due to respiratory syncytial virus,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J210,F,J21,Acute bronchiolitis due to respiratory syncytial virus,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
+J00,F,J00,acute nasopharyngitis; common cold,ILI,,,https://www.health.mil/Reference-Center/Publications/2015/10/01/Influenza-Like-Illness
+J122,F,J12,Parainfluenza virus pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
+J123,F,J12,Human metapneumovirus pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
+J1281,F,J12,Pneumonia due to SARS-associated coronavirus,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
+J1289,F,J12,Other viral pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
+J129,F,J12,"Viral pneumonia, unspecified",ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
