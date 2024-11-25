@@ -22,6 +22,8 @@ if(stand_files_names){
 #### SOURCE FUNCTIONS ###
 #////////////////////////
 # List of file paths to source
+library(tidyverse) # needed for walk function
+
 files_to_source <- c(
   "get_packages_used.R",
   "estimation_fns.R",
@@ -47,7 +49,11 @@ icd10_df = read_csv("../input_data/icd10_disease_category_list.csv")
 #////////////////////////////////////////
 #### CATEGORIZE PUDF DATA BY DISEASE ####
 #////////////////////////////////////////
-date_range = c("2022Q3", "2023Q2")
+
+# This takes so long to run had to change to parallel script on Frontera
+args       = commandArgs(TRUE)
+date       = as.character(args[1])
+date_range = c(date, date) # e.g. "2023Q1", "2023Q1"
 cat_pudf_from_fn = measure_run_time(
   categorize_patients_by_disease,
   date_range = date_range,
@@ -58,25 +64,25 @@ cat_pudf_from_fn = measure_run_time(
 #### GET ZIP POP ####
 #////////////////////
 # P_i population per ZIP code from 2018-2022 ACS
-tx_zcta_city_pop = get_zcta_acs_pop()
+#tx_zcta_city_pop = get_zcta_acs_pop()
 
 #////////////////////////////
 #### GET ZCTA-HOSP PAIRS ####
 #////////////////////////////
-output_folder_path = "../private_input_data/ICD10_CAT_PUDF_DATA/"
-zcta_hosp_pairs = 
-  count_patients_zcta_hosp_pairs(
-    date_range = c("2022Q3", "2023Q2"),
-    icd10_df
-  )
+#output_folder_path = "../private_input_data/ICD10_CAT_PUDF_DATA/"
+#zcta_hosp_pairs = 
+#  count_patients_zcta_hosp_pairs(
+#    date_range = c("2022Q3", "2023Q2"),
+#    icd10_df
+#  )
 
-catchment_output_folder = "../produced_data/HOSP_CATCHMENTS"
-  calculate_hospital_catchments(
-    geom_hosp_df, 
-    geom_col, 
-    hosp_col, 
-    pat_count_col
-  )
+#catchment_output_folder = "../produced_data/HOSP_CATCHMENTS"
+#  calculate_hospital_catchments(
+#    geom_hosp_df, 
+#    geom_col, 
+#    hosp_col, 
+#    pat_count_col
+#  )
 
 
 

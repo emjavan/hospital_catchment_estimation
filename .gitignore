@@ -3,7 +3,7 @@ produced_data/
 .DS_Store
 code/.DS_Store
 private_input_data/
-
+code/r_tidycensus_jags_geo.sif
 
 # History files
 .Rhistory
