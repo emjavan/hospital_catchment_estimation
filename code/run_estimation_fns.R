@@ -110,6 +110,10 @@ file_suffix = paste0(zcta_hosp_pairs$DISEASE_INCLUDED[1], "_",
 calculation_outputfile_path = paste0(catchment_output_folder, "HOSP-CATCH-CALC_", file_suffix)
 catchment_outputfile_path = paste0(catchment_output_folder, "HOSP-POP-CATCH_", file_suffix)
 
+# remove polygons for ZCTA when writing a csv
+tx_zcta_city_pop_no_geo = tx_zcta_city_pop %>%
+  sf::st_drop_geometry()
+
 hosp_catchments = 
   calculate_hospital_catchments(
     geom_hosp_df = zcta_hosp_pairs, 
@@ -118,12 +122,92 @@ hosp_catchments =
     pat_count_col = "PAT_COUNT",
     date_col = "DATE_RANGE", # optional but recommended
     disease_col = "DISEASE_INCLUDED", # optional but recommended
-    population_df = tx_zcta_city_pop, 
+    population_df = tx_zcta_city_pop_no_geo, 
     pop_geom_col = "ZCTA",
     pop_col = "estimate",
     calculation_outputfile_path = calculation_outputfile_path,
     catchment_outputfile_path   = catchment_outputfile_path
   )
+
+#////////////////////////////////////
+#### GET HOSP LOCATION FROM NAME ####
+#////////////////////////////////////
+
+hosp_thcic_to_ccn = read_csv("../private_input_data/thcic_id_to_ccn_hospitals_through_time.csv") %>%
+  mutate(THCIC_ID = as.character(THCIC_ID),
+         THCIC_ID_pad = str_pad(THCIC_ID, width=6, side="left", pad="0")) %>%
+  select(THCIC_ID_pad, everything())
+
+hosp_catchments$HOSPITAL[which(!(hosp_catchments$HOSPITAL %in% hosp_thcic_to_ccn$THCIC_ID_pad))]
+
+
+#### Hosp Data from CMS ####
+
+# Hand-made dictionary of replacements
+str_name_dict = read_csv("../input_data/StreetName_Replacements.csv")
+
+hosp_pos_df = 
+  read_csv("../input_data/ProviderOfService_Files/POS_File_Hospital_Non_Hospital_Facilities_Q4_2023.csv") %>%
+  filter(STATE_CD == "TX")
+
+
+cms_hosp_df = hosp_pos_df %>% # 10532 rows
+  mutate(
+    FAC_NAME_clean = clean_text_column(FAC_NAME)
+  ) %>%
+  dplyr::select(STATE_CD, CITY_NAME, ST_ADR, ZIP_CD, FAC_NAME_clean, everything()) %>%
+  mutate(across(STATE_CD:FAC_NAME_clean, as.character),
+         ST_ADR_clean = norm_street_address(clean_text_column(ST_ADR), str_name_dict),
+         ST_ADR_rm_suffix = remove_street_address_suffix(ST_ADR_clean)
+         ) %>%
+  # Not removing any unique facility names even at same address bc
+  #  those names may match the PUDF facility file
+  group_by(STATE_CD, CITY_NAME, ST_ADR_rm_suffix, ZIP_CD, FAC_NAME_clean) %>%
+  arrange(desc(CRTFCTN_DT), .by_group = T) %>% 
+  slice(1) %>% # take only most recent certification date if all other location details the same
+  ungroup() %>% # 9691 rows
+  dplyr::select(STATE_CD, CITY_NAME, ST_ADR_rm_suffix, ZIP_CD, FAC_NAME_clean)
+  arrange(STATE_CD, CITY_NAME, ST_ADR, ST_ADR_clean, ST_ADR_rm_suffix, ZIP_CD, FAC_NAME_clean, everything())
+  
+  
+#### Hosp Data from PUDF ####
+facility_df = 
+  read_delim("../private_input_data/OG_PUDF_DATA/PUDF_2023Q4_tab-delimited/IP_PUDF_FACILITY_TYPE_2023Q4_tab.txt",
+             delim="\t")
+pudf_hosp_df = facility_df %>%
+  dplyr::select(-starts_with("FAC_"), -starts_with("POA_"), -starts_with("CERT_")) %>%
+  mutate(
+    PROVIDER_NAME_clean = PROVIDER_NAME %>%
+      iconv(from = "UTF-8", to = "ASCII//TRANSLIT", sub = "") %>% # Remove non-ASCII characters
+      gsub(" - ", " ", .) %>% # Replace hyphen with spaces around it
+      gsub("-", " ", .) %>% # Replace hyphen without spaces with a space
+      gsub("[&,'\\.]", "", .) %>% # Remove &, commas, apostrophes, and periods
+      gsub("  ", " ", .) %>% # Replace any double spaces with single
+      toupper() # Convert to uppercase
+  )  %>%
+  dplyr::select(PROVIDER_NAME_clean, PROVIDER_NAME, everything())
+
+
+match_facility_names = pudf_hosp_df %>%
+  select(THCIC_ID, PROVIDER_NAME_clean, FACILITY_TYPE) %>%
+  left_join(cms_hosp_df, by=c("PROVIDER_NAME_clean"="FAC_NAME_clean")) %>%
+  # Choose match with most recent certification number date
+  group_by(THCIC_ID) %>%
+  arrange(desc(CRTFCTN_DT), .by_group = T) %>%
+  slice(1) %>%
+  ungroup() 
+
+not_found_fac = match_facility_names %>%
+  filter(is.na(FAC_NAME)) %>%
+  dplyr::select(THCIC_ID, PROVIDER_NAME_clean, FACILITY_TYPE) %>%
+  mutate(PROVIDER_NAME_clean = gsub("UT ", "UNIVERSITY OF TEXAS ", PROVIDER_NAME_clean)   )
+
+
+hosp_catchments$HOSPITAL[which((hosp_catchments$HOSPITAL %in% not_found_fac$THCIC_ID))]
+
+
+
+
 
 
 
