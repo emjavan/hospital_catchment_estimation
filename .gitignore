@@ -1,8 +1,8 @@
 # Ignore folders without code
-produced_data/
 .DS_Store
 code/.DS_Store
 private_input_data/
+private_results/
 code/r_tidycensus_jags_geo.sif
 
 # History files
