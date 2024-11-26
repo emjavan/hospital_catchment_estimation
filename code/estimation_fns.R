@@ -476,7 +476,7 @@ count_patients_zcta_hosp_pairs = function(
     all_file_paths <- list_files_in_date_range(input_folder_path, date_range)
     
     # Row bind all the files in all_file_paths
-    combined_data <- filtered_files %>%
+    combined_data <- all_file_paths %>%
       map(~ read_csv(.x) %>% 
             # Make every column character to avoid any type mismatch
             mutate(across(everything(), as.character))
