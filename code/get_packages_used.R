@@ -14,9 +14,10 @@ if (!require("pacman")){
   }
 
 # Dplyover is experimental, so must get from github
-if(!require("dplyover")){
-  remotes::install_github("TimTeaFan/dplyover")
-}
+# Current code doesn't use this package but I've had good success with it in past
+# if(!require("dplyover")){
+#   remotes::install_github("TimTeaFan/dplyover")
+# }
 
 # Load libraries
 pacman::p_load(

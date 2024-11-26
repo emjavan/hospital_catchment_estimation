@@ -1,3 +1,9 @@
+#////////////////////////////////////////////////////////////
+# All functions to perform hospital population catchment
+#  for any set of ICD-10-CM codes provided
+# Emily Javan - ATX - 2024-11-25
+#////////////////////////////////////////////////////////////
+
 
 #////////////////////////////////////////////////////////////
 #' Get the run time of a function
@@ -21,48 +27,69 @@ measure_run_time <- function(func, ...) {
 #/////////////////////////////////////////////////////////////////////////////////////////////////////
 #' Get TX ZCTA population and geometry
 get_zcta_acs_pop = function(
-  census_api_key = NULL,
+  census_api_key = CENSUS_API_KEY,
   data_variables = "B01001A_001", # could change to vector of population by age
   data_set_name = "population", # name whatever makes sense for data being pulled
   data_year = 2022, # default is ACS 2-year so 2022 is 2018-2022 average
   download_geometry = TRUE, 
-  state="TX" # FIPS code 48
+  state="TX", # FIPS code 48
+  city_grouping_col = "ZIPName"
   ){
   # Check if API key
-  if(is.null(Sys.getenv("CENSUS_API_KEY")) | !is.null(census_api_key)){
+  if(is.null(Sys.getenv("CENSUS_API_KEY")) | is.null(census_api_key)){
     census_api_key(census_api_key, install=TRUE, overwrite=TRUE)
   }
 
-  output_file_path_prefix = paste("../input_data/acs_zcta", state, data_set_name, data_year, sep="_")
+  output_file_path_prefix = paste("../input_data/acs_zcta", state, data_set_name, 
+                                  data_year, city_grouping_col, sep="_")
   output_file_path = paste0(output_file_path_prefix, ".rda")
   if(!file.exists(output_file_path)){
     acs_data = get_acs(geography = "zcta", variables = data_variables, 
                        year = data_year, geometry = download_geometry, 
                        cb = FALSE) # cb is a input of tigris::zctas
     
+    # Crosswalk for only state of interestn (TX for PUDF data)
     zcta_to_city = read_csv(paste0("../input_data/", state, "_ZCTA-CDP_pop-weighted_geocorr2022.csv")) %>%
       slice(-1) %>% # extra row of col descriptions
       drop_na(zcta)
     
     # Leaving PO Boxes because they have ZCTA population data in tidycensus
     # Ultimate goal is to assign hospitals to cities so that is sufficient
-    acs_data_filtered = acs_data %>%
-      filter(GEOID %in% zcta_to_city$zcta) %>%
+    acs_data_filtered = acs_data %>% # for all of US
+      filter(GEOID %in% zcta_to_city$zcta) %>% # filter to ZCTA in crosswalk file to city name
       dplyr::select(-NAME, -variable) %>%
       left_join(zcta_to_city, by=c("GEOID"="zcta")) %>%
       mutate(ACS_5YEAR=data_year) %>%
-      dplyr::select(ZIPName, GEOID, estimate, moe) %>% # 76573 converts to 76530 for example
+      # afact is the allocation factor needed if city_grouping_col = "PlaceName"
+      dplyr::select(!!sym(city_grouping_col), GEOID, estimate, moe, afact) %>%
       distinct() %>%
-      rename(ZCTA=GEOID)
+      rename(ZCTA=GEOID) 
     
-    save(acs_data_filtered, file=output_file_path)
+    if(city_grouping_col == "ZIPName"){
+      acs_data_grouped = acs_data_filtered %>%
+        mutate(ZIPName_clean = gsub(" \\(PO boxes\\)", "", ZIPName) ) %>%
+        group_by(ZIPName_clean, ZCTA) %>%
+        slice(1) %>%
+        ungroup() %>%
+        rename(CITY_NAME = ZIPName_clean) %>%
+        dplyr::select(-ZIPName, -afact)
+    }else{
+      acs_data_grouped = acs_data_filtered %>%
+        group_by(ZCTA) %>%
+        arrange(desc(afact), .by_group=T) %>%
+        slice(1) %>%
+        ungroup() %>%
+        rename(CITY_NAME = !!sym(city_grouping_col))
+    } # end if grouping col needs to be cleaned
+    
+    save(acs_data_grouped, file=output_file_path)
     
   }else{
     # load data if it file already created
     load(output_file_path)
   }
   
-  return(acs_data_filtered)
+  return(acs_data_grouped)
 } # end get_zcta_acs_pop
 
 #/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,8 +130,41 @@ get_dates_in_range = function(
   return(year_quarter)
 } # end get_dates_in_range
 
+#///////////////////////////////////////////////////////////////////////////////////////////////////
+#' Function to check ICD-10 code match based on matching the first 3 characters or the full string.
+#' 
+list_files_in_date_range <- function(
+    input_folders,
+    date_range = c("2018Q3", "2023Q2")
+) {
+  # Get valid dates in the specified range
+  valid_dates <- get_dates_in_range(date_range)$FILE_DATE
+  
+  # Initialize an empty vector to store matching files
+  filtered_files <- c()
+  
+  # Iterate over each folder
+  for (folder in input_folders) {
+    # List files in the current folder
+    all_files <- list.files(folder, full.names = TRUE)
+    # remove any trailing slash duplication
+    cleaned_files <- gsub("//", "/", all_files)
+    
+    # Extract the file dates (assuming they are in the format `YEARQQUARTER`)
+    file_dates <- str_extract(basename(cleaned_files), "\\d{4}Q[1-4]")
+    
+    # Filter files that match the valid dates
+    matching_files <- cleaned_files[file_dates %in% valid_dates]
+    
+    # Append to the result vector
+    filtered_files <- c(filtered_files, matching_files)
+  }
+  
+  # Return the flat vector of filtered file paths
+  return(filtered_files)
+}
 
-
+#////////////////////////////////////////////////////////////////////////////////////////////////////
 #' Function to check ICD-10 code match based on matching the first 3 characters or the full string.
 #' 
 #' This function checks if the diagnosis code from patient data matches an ICD-10 code from the ICD-10 category list.
@@ -394,42 +454,66 @@ categorize_patients_by_disease = function(date_range, icd10_df){
 #' Clean IP PUDF files to ZCTA-Hosp pairs by ICD-10 code set
 count_patients_zcta_hosp_pairs = function(
     date_range = c("2018Q4", "2020Q4"), # NULL for synthetic data set
-    icd10_df
+    input_folder_path,
+    optional_col_groupings = NULL, #c("YEAR", "QUARTER") or could be "DISCHARGE" for combination
+    output_folder_path
   ){
-
-  # remove anonymized PAT_ZIP before counting
-  filter(!(PAT_ZIP=="88888")) %>% 
+  # Get names of diseases used to get patient counts + make string
+  disease_choices = gsub(".*PUDF_", "", input_folder_path)
+  disease_choices = gsub("\\/", "", disease_choices)
+  disease_choice_string = paste(disease_choices, collapse = "-")
   
- 
+  # Make date string
+  date_range_string = paste0(date_range[1], "-", date_range[2])
   
-  #check if files exists before making with categorize_patients_by_disease()
-  output_file_path_df = categorize_patients_by_disease(date_range, icd10_df)
+  # Make output file path to check for
+  output_file_path = paste0(output_folder_path, "ZCTA-HOSP-PAIR_", disease_choice_string,
+                            "_",  date_range_string,".csv")
   
+  # Check if this output file exists
+  if(!file.exists(output_file_path)){
+    # List file in input_folder_path that satisfies date_range
+    all_file_paths <- list_files_in_date_range(input_folder_path, date_range)
+    
+    # Row bind all the files in all_file_paths
+    combined_data <- filtered_files %>%
+      map(~ read_csv(.x) %>% 
+            # Make every column character to avoid any type mismatch
+            mutate(across(everything(), as.character))
+      ) %>%
+      bind_rows()
+    
+    # Patients with co-infection can appear in multiple disease specific datasets
+    # We do not want to double count them
+    if(length(input_folder_path)>1){
+      combined_data = combined_data %>%
+        group_by(RECORD_ID) %>%
+        slice(1) %>%
+        ungroup()
+    } # end if we joined different disease datasets
+    
+    # Remove where the Patient ZIP code is unknown
+    clean_combine_data = combined_data %>%
+      filter(!(PAT_ZIP=="88888" | is.na(PAT_ZIP))) %>% 
+      filter(nchar(PAT_ZIP)>=5)
+    
+    # Group by PAT_ZIP and THCIC_ID to count patients per pair
+    group_data = clean_combine_data %>%
+      separate(DISCHARGE, into=c("YEAR", "QUARTER"), sep="Q", remove = F) %>%
+      group_by(PAT_ZIP, THCIC_ID, !!!syms(optional_col_groupings) ) %>%
+      summarise(PAT_COUNT = n(),
+                DATE_RANGE = date_range_string,
+                DISEASE_INCLUDED = disease_choice_string) %>%
+      ungroup()
+    
+    # Save output to file
+    write.csv(group_data, output_file_path, row.names = F)
+  }else{
+    group_data = read_csv(output_file_path)
+  } # end if this date-disease combination exists
   
-  # other wise open files 
-  # => need those new disease files locations
-  
-
-  
-  
-  
-  
-      output_folder_path
-  
-  
+  return(group_data)
 } # end count_patients_zcta_hosp_pairs
-
-
-
-
-
-
-
-
-
-
-
-
 
 #//////////////////////////////////////////////////////////////////////////////////////////////
 #' Calculate Hospital Catchments
@@ -446,7 +530,6 @@ count_patients_zcta_hosp_pairs = function(
 #' @param pat_count_col A string specifying the column name for `PAT_COUNT` in `geom_hosp_df`.
 #' @param year_col Optional. A string specifying the column name for `YEAR` in `geom_hosp_df`.
 #' @param quarter_col Optional. A string specifying the column name for `QUARTER` in `geom_hosp_df`.
-#' @param disease_col Optional. A string specifying the column name for `DISEASE` in `geom_hosp_df`.
 #' @param population_df A dataframe with geom populations, containing columns `GEOMETRY` and `POPULATION`.
 #' @param example_output_path A string specifying the file path and name to write the example dataset.
 #' @param calcultion_outputfile_path A string specifying where to write files used to calculate catchment
@@ -462,8 +545,7 @@ count_patients_zcta_hosp_pairs = function(
 #'   HOSPITAL = c("H1", "H1", "H2"),
 #'   PAT_COUNT = c(100, 50, 50),
 #'   YEAR = c(2023, 2023, 2023),
-#'   QUARTER = c(1, 1, 1),
-#'   DISEASE = c("COVID-19", "COVID-19", "COVID-19")
+#'   QUARTER = c(1, 1, 1)
 #' )
 #' population_data <- data.frame(
 #'   ZCTA5 = c(1, 2),
@@ -477,7 +559,6 @@ count_patients_zcta_hosp_pairs = function(
 #'   pat_count_col = "PAT_COUNT",
 #'   year_col = "YEAR",
 #'   quarter_col = "QUARTER",
-#'   disease_col = "DISEASE",
 #'   population_df = population_data,
 #'   calcultion_outputfile_path = "example_data.csv",
 #'   
@@ -487,51 +568,72 @@ calculate_hospital_catchments <- function(
     geom_col, 
     hosp_col, 
     pat_count_col, 
-    year_col = NULL, 
-    quarter_col = NULL, 
-    disease_col = NULL, 
+    date_col = NULL, 
+    disease_col = NULL,
     population_df, 
-    calcultion_outputfile_path = NULL,
-    catchment_outputfile_path = NULL
+    pop_geom_col, 
+    pop_col,
+    calculation_outputfile_path = NULL,
+    catchment_outputfile_path = NULL,
+    overwrite_files = FALSE
     ) {
-  # Ensure columns exist
-  required_cols <- c(geom_col, hosp_col, pat_count_col)
-  optional_cols <- c(year_col, quarter_col, disease_col)
-  missing_cols <- setdiff(required_cols, names(geom_hosp_df))
   
-  if (length(missing_cols) > 0) {
-    stop(paste("The following required columns are missing in `geom_hosp_df`: ", 
-               paste(missing_cols, collapse = ", ")))
-  }
+  if(!(file.exists(calculation_outputfile_path) | 
+       file.exists(catchment_outputfile_path)) | 
+     overwrite_files
+     ){
+    # Ensure columns exist
+    required_cols <- c(geom_col, hosp_col, pat_count_col, pop_geom_col, pop_col)
+    optional_cols <- c(date_col, disease_col)
+    missing_cols <- setdiff(required_cols, c(names(geom_hosp_df), names(population_df)) )
+    
+    if (length(missing_cols) > 0) {
+      stop(paste("The following required columns are missing: ", 
+                 paste(missing_cols, collapse = ", ")))
+    }
+    
+    # Join with population data and keep all cols needed to estimate catchment
+    geom_hosp_needed_cols_df <- geom_hosp_df %>%
+      rename_with(~ c("ZCTA", "HOSPITAL", "PAT_COUNT"), 
+                  .cols = c(!!geom_col, !!hosp_col, !!pat_count_col)) %>%
+      mutate(across(ZCTA:HOSPITAL, as.character)) %>%
+      # Join population by GEOMETRY
+      left_join(population_df %>% 
+                  rename(POPULATION = !!pop_col, ZCTA = !!pop_geom_col) %>%
+                  mutate(across(ZCTA, as.character)), 
+                by = "ZCTA") %>%
+      # Calculate total patients per each GEOMETRY
+      group_by(ZCTA) %>%
+      mutate(TOTAL_PAT_PER_ZCTA_COUNT = sum(PAT_COUNT)) %>%
+      ungroup() %>%
+      # Calculate catchment population contributions
+      mutate(PAT_COUNT_PROPORTION = (PAT_COUNT / TOTAL_PAT_PER_ZCTA_COUNT),
+             ZCTA_CONTRIBUTION = PAT_COUNT_PROPORTION * POPULATION
+      )
+    
+    # write data to calculate catchment to file if path specified
+    if(!is.null(calculation_outputfile_path)){
+      write.csv(geom_hosp_needed_cols_df, 
+                calculation_outputfile_path, 
+                row.names = FALSE)
+    }
+    
+    # Summarize catchment population by hospital
+    catchments <- geom_hosp_needed_cols_df %>%
+      group_by(HOSPITAL, across(all_of(optional_cols))) %>%
+      summarize(HOSP_CATCHMENT = sum(ZCTA_CONTRIBUTION, na.rm = TRUE)) %>%
+      ungroup()
+    
+    # write hospital population catchment to file if path specified
+    if(!is.null(catchment_outputfile_path)){
+      write.csv(catchments, catchment_outputfile_path, row.names = FALSE)
+    }
+  }else{
+    message("Both passed files already exist")
+  } # end if file exists
   
-  # Join with population data
-  geom_hosp_needed_cols_df <- geom_hosp_df %>%
-    rename_with(~ c("ZCTA", "HOSPITAL", "PAT_COUNT"), 
-                .cols = c(!!geom_col, !!hosp_col, !!pat_count_col)) %>%
-    # Join population by GEOMETRY
-    left_join(population_df %>% rename(POPULATION = "POPULATION", GEOMETRY = !!geom_col), by = "GEOMETRY") %>%
-    # Calculate total patients per each GEOMETRY
-    group_by(GEOMETRY) %>%
-    mutate(TOTAL_PAT_PER_GEOM = sum(PAT_COUNT)) %>%
-    ungroup() %>%
-    # Calculate catchment population contributions
-    mutate(PAT_COUNT_PROPORTION = (PAT_COUNT / TOTAL_PAT_PER_GEOM_COUNT),
-           GEO_CONTRIBUTION = PAT_COUNT_PROPORTION * POPULATION) 
   
-  # write data to calculate catchment to file if path specified
-  if(!is.null(calcultion_outputfile_path)){
-    write.csv(geom_hosp_needed_cols_df, calcultion_outputfile_path, row.names = FALSE)
-  }
   
-  # Summarize catchment population by hospital
-  catchments <- geom_hosp_needed_cols_df %>%
-    group_by(HOSPITAL, across(all_of(optional_cols))) %>%
-    summarize(HOSP_CATCHMENT = sum(GEO_CONTRIBUTION, na.rm = TRUE), .groups = "drop")
-  
-  # write hospital population catchment to file if path specified
-  if(!is.null(catchment_outputfile_path)){
-    write.csv(catchments, catchment_outputfile_path, row.names = FALSE)
-  }
   
   return(catchments)
 }
