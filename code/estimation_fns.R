@@ -6,6 +6,50 @@
 
 
 #////////////////////////////////////////////////////////////
+#' Clean a text col to get rid of unknown characters or 
+#'  ones that get used selectively, e.g. St. > St > ST
+clean_text_column <- function(string) {
+
+  # Apply the cleaning logic
+  clean_string = string %>%
+        iconv(from = "UTF-8", to = "ASCII//TRANSLIT", sub = "") %>% # Remove non-ASCII characters
+        gsub(" - ", " ", .) %>% # Replace hyphen with spaces around it
+        gsub("-", " ", .) %>% # Replace hyphen without spaces with a space
+        gsub("[&,'\\.]", "", .) %>% # Remove &, commas, apostrophes, and periods
+        gsub("  ", " ", .) %>% # Replace any double spaces with single
+        toupper() # Convert to uppercase
+  
+  return(clean_string)
+} # end clean_text_column
+
+
+#////////////////////////////////////////////////////////////
+#' Normalize street addresses
+norm_street_address <- function(address, dictionary) {
+
+  # Convert dictionary to a named vector
+  replacements <- setNames(dictionary$with, dictionary$replace)
+  
+  # Apply all replacements at once
+  address <- toupper(address) # Ensure consistency
+  address <- str_replace_all(address, replacements) # Vectorized replacements
+  
+  return(address)
+} # end norm_street_address
+
+#////////////////////////////////////////////////////////////
+#' Normalize street addresses
+remove_street_address_suffix = function(address){
+  # Remove all suffix
+  address <- gsub("\\b(ST|AVE|BLVD|RD|DR|LN|WAY|TER|PL|CIR)\\b.*", "", address)
+  address <- trimws(address) # Remove extra spaces
+  
+  return(address)
+} # end remove_street_address_suffix
+
+
+
+#////////////////////////////////////////////////////////////
 #' Get the run time of a function
 #' 
 #' @param func any function 
@@ -630,11 +674,9 @@ calculate_hospital_catchments <- function(
     }
   }else{
     message("Both passed files already exist")
+    catchments = read_csv(catchment_outputfile_path)
   } # end if file exists
-  
-  
-  
-  
+
   return(catchments)
 }
 

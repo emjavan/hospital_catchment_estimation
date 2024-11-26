@@ -25,6 +25,7 @@ pacman::p_load(
   icecream, # allows print statements that will not print when deactivated
   testthat, # ensure functions actually work
   tidycensus, # download ACS data and geometries
-  sf # for spatial plotting and st_drop_geometry
+  sf, # for spatial plotting and st_drop_geometry
+  stringdist # needed to cluster similar strings
 )
 
