@@ -1,3 +1,13 @@
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2015Q3
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2015Q4
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2016Q3
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2016Q4
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2016Q1
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2016Q2
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2017Q3
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2017Q4
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2017Q1
+time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2017Q2
 time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q3
 time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q4
 time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q1

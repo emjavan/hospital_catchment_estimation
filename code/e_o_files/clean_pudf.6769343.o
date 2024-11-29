@@ -1,0 +1,84 @@
+Launcher: Setup complete.
+
+------------- SUMMARY ---------------
+   Number of hosts:    2
+   Working directory:  /work2/06778/emj976/frontera/hospital_catchment_estimation/code
+   Processes per host: 2
+   Total processes:    4
+   Total jobs:         24
+   Scheduling method:  interleaved
+
+-------------------------------------
+Launcher: Starting parallel tasks...
+Launcher: Task 1 running job 2 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q4)
+Launcher: Task 0 running job 1 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q3)
+Launcher: Task 2 running job 3 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q1)
+Launcher: Task 3 running job 4 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2018Q2)
+Elapsed Time: 31308.12  sec
+Launcher: Job 1 completed in 31321 seconds.
+Launcher: Task 0 running job 5 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2019Q3)
+Elapsed Time: 31637.98  sec
+Launcher: Job 2 completed in 31652 seconds.
+Launcher: Task 1 running job 6 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2019Q4)
+Elapsed Time: 32153.17  sec
+Launcher: Job 4 completed in 32204 seconds.
+Launcher: Task 3 running job 8 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2019Q2)
+Elapsed Time: 32459.56  sec
+Launcher: Job 3 completed in 32469 seconds.
+Launcher: Task 2 running job 7 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2019Q1)
+Elapsed Time: 33186.68  sec
+Launcher: Job 5 completed in 33200 seconds.
+Launcher: Task 0 running job 9 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2020Q3)
+Elapsed Time: 32409.08  sec
+Launcher: Job 8 completed in 32414 seconds.
+Launcher: Task 3 running job 12 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2020Q2)
+Elapsed Time: 32608.29  sec
+Launcher: Job 7 completed in 32611 seconds.
+Launcher: Task 2 running job 11 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2020Q1)
+Launcher: Job 6 completed in 34551 seconds.
+Launcher: Task 1 running job 10 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2020Q4)
+Elapsed Time: 29218.5  sec
+Launcher: Job 12 completed in 29225 seconds.
+Launcher: Task 3 running job 16 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2021Q2)
+Elapsed Time: 33713.55  sec
+Launcher: Job 9 completed in 33730 seconds.
+Launcher: Task 0 running job 13 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2021Q3)
+Elapsed Time: 34566.77  sec
+Launcher: Job 11 completed in 34576 seconds.
+Launcher: Task 2 running job 15 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2021Q1)
+Elapsed Time: 35412.34  sec
+Launcher: Job 10 completed in 35419 seconds.
+Launcher: Task 1 running job 14 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2021Q4)
+Elapsed Time: 34539.83  sec
+Launcher: Job 16 completed in 34554 seconds.
+Launcher: Task 3 running job 20 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2022Q2)
+Elapsed Time: 35038.24  sec
+Launcher: Job 13 completed in 35048 seconds.
+Launcher: Task 0 running job 17 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2022Q3)
+Elapsed Time: 0.1474872  sec
+Launcher: Job 17 completed in 8 seconds.
+Launcher: Task 0 running job 21 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2023Q3)
+Elapsed Time: 34314.42  sec
+Launcher: Job 15 completed in 34329 seconds.
+Launcher: Task 2 running job 19 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2022Q1)
+Elapsed Time: 35155.5  sec
+Launcher: Job 14 completed in 35162 seconds.
+Launcher: Task 1 running job 18 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2022Q4)
+Elapsed Time: 0.1442261  sec
+Launcher: Job 18 completed in 9 seconds.
+Launcher: Task 1 running job 22 on c207-029.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2023Q4)
+Elapsed Time: 34988.54  sec
+Launcher: Job 20 completed in 35004 seconds.
+Launcher: Task 3 running job 24 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2023Q2)
+Elapsed Time: 0.1623132  sec
+Launcher: Job 24 completed in 14 seconds.
+Launcher: Task 3 done. Exiting.
+Elapsed Time: 34210.36  sec
+Launcher: Job 19 completed in 34220 seconds.
+Launcher: Task 2 running job 23 on c207-030.frontera.tacc.utexas.edu (time apptainer exec r_tidycensus_jags_geo.sif Rscript run_estimation_fns.R 2023Q1)
+Elapsed Time: 0.1459265  sec
+Launcher: Job 23 completed in 6 seconds.
+Launcher: Task 2 done. Exiting.
+Elapsed Time: 37251.02  sec
+Launcher: Job 21 completed in 37257 seconds.
+Launcher: Task 0 done. Exiting.
