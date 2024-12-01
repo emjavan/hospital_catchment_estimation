@@ -5,6 +5,8 @@ private_input_data/
 private_results/
 # ignore big singularity container
 code/r_tidycensus_jags_geo.sif
+big_input_data/
+metadata/
 
 # History files
 .Rhistory
