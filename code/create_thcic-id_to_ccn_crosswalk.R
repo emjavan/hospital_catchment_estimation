@@ -353,14 +353,15 @@ hosp_catchments_with_location = hosp_catchments %>%
   ) %>%
   unnest(match, keep_empty = T) %>% # keep the THCIC_IDs that did not find a match
   ungroup() %>%
-  group_by(THCIC_ID) %>%
-  slice(1) %>%
-  ungroup() %>%
+# Do not remove any duplicate hospital names from catchment
+  # group_by(THCIC_ID) %>%
+  # mutate(multiple_IDs = n()) %>%
+  # #slice(1) %>%
+  # ungroup() %>%
   dplyr::select(INFO_ORIGIN, DATE_RANGE, DISEASE_INCLUDED, 
                 HOSPITAL, HOSP_CATCHMENT,
                 CITY, STATE, everything(), 
                 -THCIC_ID) # same as HOSPITAL in this file
-
 write.csv(
   hosp_catchments_with_location,
   paste0("../private_results/HOSP_CATCHMENTS/CITY-HOSP-POP-CATCH_", 
