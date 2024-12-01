@@ -272,7 +272,7 @@ if(!file.exists(all_found_fac_path)){
   write.csv(all_found_hosp_clean, all_found_fac_path, row.names = F)
 
 }else{
-  all_found_hosp = read_csv(all_found_fac_path)
+  all_found_hosp_clean = read_csv(all_found_fac_path)
 } # end if all_hosp csv file exists
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,8 +292,8 @@ if(!file.exists(missing_fac_path)){
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #### NEEDED FACILITIES ####
 # These files created by "run_estimation_fns.R"
-disease = "FLU-ILI-RSV" # hyphen separated alphabetical string
-date_range = "2022Q3-2023Q2" # hyphen separated start-end date string e.g. 2018Q3-2019Q2
+disease = "FLU" # hyphen separated alphabetical string
+date_range = "2017Q3-2019Q2" # hyphen separated start-end date string e.g. 2018Q3-2019Q2
 zcta_hosp_pairs = read_csv(paste0("../private_results/ZCTA-HOSP-PAIR_", 
                                   disease, "_", date_range, ".csv"))
 hosp_catchments = read_csv(paste0("../private_results/HOSP_CATCHMENTS/HOSP-POP-CATCH_", 
