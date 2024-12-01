@@ -3,7 +3,7 @@ DSHS PUDF only gives the hospital names (no address. lat/long, etc) and their na
 We use the three "Hosp Data" files below to find a best candidate name for hospitals and use the name dictonaries
 to normalize to find best match, e.g. UNIVERSITY OF TEXAS to UT, etc.
 
-## DSHS Hosp Data
+## 1. DSHS Hosp Data
 File downloaded from [here](https://www.hhs.texas.gov/sites/default/files/documents/general-special-hospital-list.xlsx) </br>
 
 First row of general-special-hospital-list.xlsx was : </br>
@@ -13,11 +13,11 @@ FOR A CURRENT LICENSE STATUS INFORMATION PLEASE VISIT OUR PUBLIC LICENSE SEARCH 
 Updated KINDRED HOSPITAL-TARRANT COUNTY > KINDRED HOSPITAL-TARRANT COUNTY FORT WORTH since there is a duplicate/non-unique name mapping
 
 
-## HHS Hosp Data
+## 2. HHS Hosp Data
 This file is too large for github so it's in the folder "big_input_data" and ignored. </br>
 You can download [here](https://healthdata.gov/Hospital/COVID-19-Reported-Patient-Impact-and-Hospital-Capa/anag-cw7u/about_data)
 
-## CMS Hosp Data
+## 3. CMS Hosp Data
 This file is too large for github so it's in the folder "big_input_data" and ignored. </br>
 You can download [here](https://data.cms.gov/provider-characteristics/hospitals-and-other-facilities/provider-of-services-file-hospital-non-hospital-facilities)
 
