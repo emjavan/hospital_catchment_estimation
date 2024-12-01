@@ -99,9 +99,9 @@ zcta_per_city = us_zcta_city_pop %>%
 #  too much data for local machine??? Will try on Frontera
 
 input_folder_path <- c(
-  "../private_input_data/PUDF_FLU/",
-  "../private_input_data/PUDF_RSV/",
-  "../private_input_data/PUDF_ILI/"
+  "../private_input_data/PUDF_FLU/"
+  #"../private_input_data/PUDF_RSV/",
+  #"../private_input_data/PUDF_ILI/"
   #"../private_input_data/PUDF_COV/" 
   )
 #input_folder_path = "../private_input_data/PUDF_FLU/"
@@ -109,7 +109,7 @@ output_folder_path = "../private_results/"
 if(!dir.exists(output_folder_path)){dir.create(output_folder_path)}
 zcta_hosp_pairs = 
   count_patients_zcta_hosp_pairs(
-    date_range = c("2022Q3", "2023Q2"),
+    date_range = c("2017Q3", "2019Q2"),
     input_folder_path = input_folder_path,
     output_folder_path = output_folder_path
   )
