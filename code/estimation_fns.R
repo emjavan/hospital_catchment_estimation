@@ -15,27 +15,27 @@ clean_text_column <- function(string) {
         iconv(from = "UTF-8", to = "ASCII//TRANSLIT", sub = "") %>% # Remove non-ASCII characters
         gsub(" - ", " ", .) %>% # Replace hyphen with spaces around it
         gsub("-", " ", .) %>% # Replace hyphen without spaces with a space
-        gsub("[&,'\\.]", "", .) %>% # Remove &, commas, apostrophes, and periods
+        gsub("[&,'\\.()]", "", .) %>% # Remove &, commas, apostrophes, periods, and parentheses
         gsub("  ", " ", .) %>% # Replace any double spaces with single
         toupper() # Convert to uppercase
   
   return(clean_string)
 } # end clean_text_column
 
-
 #////////////////////////////////////////////////////////////
 #' Normalize street addresses
-norm_street_address <- function(address, dictionary) {
+norm_name_with_dict <- function(name, dictionary) {
 
   # Convert dictionary to a named vector
-  replacements <- setNames(dictionary$with, dictionary$replace)
+  replacements <- setNames(dictionary$NEW_NAME, # replacements
+                           dictionary$OG_NAME ) # patterns
   
   # Apply all replacements at once
-  address <- toupper(address) # Ensure consistency
-  address <- str_replace_all(address, replacements) # Vectorized replacements
+  name <- toupper(name) # Ensure consistency
+  name_new <- str_replace_all(name, replacements) # Vectorized replacements
   
-  return(address)
-} # end norm_street_address
+  return(name_new)
+} # end norm_name_with_dict
 
 #////////////////////////////////////////////////////////////
 #' Normalize street addresses
@@ -76,7 +76,7 @@ get_zcta_acs_pop = function(
   data_set_name = "population", # name whatever makes sense for data being pulled
   data_year = 2022, # default is ACS 2-year so 2022 is 2018-2022 average
   download_geometry = TRUE, 
-  state="TX", # FIPS code 48
+  state="US", # TX, or any other state acronym okay
   city_grouping_col = "ZIPName"
   ){
   # Check if API key
@@ -84,7 +84,7 @@ get_zcta_acs_pop = function(
     census_api_key(census_api_key, install=TRUE, overwrite=TRUE)
   }
 
-  output_file_path_prefix = paste("../input_data/acs_zcta", state, data_set_name, 
+  output_file_path_prefix = paste("../big_input_data/acs_zcta", state, data_set_name, 
                                   data_year, city_grouping_col, sep="_")
   output_file_path = paste0(output_file_path_prefix, ".rda")
   if(!file.exists(output_file_path)){
@@ -93,14 +93,18 @@ get_zcta_acs_pop = function(
                        cb = FALSE) # cb is a input of tigris::zctas
     
     # Crosswalk for only state of interestn (TX for PUDF data)
-    zcta_to_city = read_csv(paste0("../input_data/", state, "_ZCTA-CDP_pop-weighted_geocorr2022.csv")) %>%
+    zcta_to_city = read_csv(paste0("../big_input_data/", state, "_ZCTA-CDP_pop-weighted_geocorr2022.csv")) %>%
       slice(-1) %>% # extra row of col descriptions
-      drop_na(zcta)
+      drop_na(zcta) %>%
+      # Download has PR which has accents/tilda on letters
+      mutate(PlaceName = iconv(PlaceName, from = "UTF-8", to = "ASCII//TRANSLIT"),
+             ZIPName   = iconv(ZIPName,   from = "UTF-8", to = "ASCII//TRANSLIT"))
     
     # Leaving PO Boxes because they have ZCTA population data in tidycensus
     # Ultimate goal is to assign hospitals to cities so that is sufficient
+    zcta_in_crosswalk = unique(zcta_to_city$zcta)
     acs_data_filtered = acs_data %>% # for all of US
-      filter(GEOID %in% zcta_to_city$zcta) %>% # filter to ZCTA in crosswalk file to city name
+      filter(GEOID %in% zcta_in_crosswalk) %>% # filter to ZCTA in crosswalk file to city name
       dplyr::select(-NAME, -variable) %>%
       left_join(zcta_to_city, by=c("GEOID"="zcta")) %>%
       mutate(ACS_5YEAR=data_year) %>%
@@ -372,7 +376,7 @@ get_og_pudf_files_in_date_range = function(
       ic(length(all_dates$FILE_DATE))
       ic(length(files_in_range))
       
-      abort(message = "not all files found from date range \n")
+      rlang::abort(message = "not all files found from date range \n")
     } # end if needed file(s) not found
   }else{
     # files_in_range = path to synthetic data
@@ -478,7 +482,7 @@ categorize_patients_by_disease = function(date_range, icd10_df){
           # Update the output_file_created column to TRUE for the matching row
           output_file_path_df$output_file_created[matching_index] = TRUE
          }else{
-           warn(paste0(output_file_path_df$disease[file_index], 
+           rlang::warn(paste0(output_file_path_df$disease[file_index], 
                        " columns were not found in IP PUDF ", 
                        output_file_path_df$file_date[file_index]))
          } # end if disease cols were not found
@@ -504,7 +508,7 @@ count_patients_zcta_hosp_pairs = function(
   ){
   # Get names of diseases used to get patient counts + make string
   disease_choices = gsub(".*PUDF_", "", input_folder_path)
-  disease_choices = gsub("\\/", "", disease_choices)
+  disease_choices = sort(gsub("\\/", "", disease_choices))
   disease_choice_string = paste(disease_choices, collapse = "-")
   
   # Make date string
