@@ -38,7 +38,7 @@ hosp_name_dict  = read_csv("../input_data/HospitalName_Replacements.csv") %>%
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #### PUDF Hosp Data ####
-pudf_fac_file_path = "../private_input_data/ALL_PUDF_FACILITIES_2015Q3-2023-Q4.csv"
+pudf_fac_file_path = "../private_input_data/ALL_PUDF_FACILITIES_2015Q3-2023Q4.csv"
 if(!file.exists(pudf_fac_file_path)){
   # Define the OG PUDF folder path
   base_pudf_path <- "../private_input_data/OG_PUDF_DATA"
@@ -77,7 +77,7 @@ if(!file.exists(pudf_fac_file_path)){
     ungroup() # 922
   
   write.csv(pudf_hosp_df, 
-            "../private_input_data/ALL_PUDF_FACILITIES_2015Q3-2023-Q4.csv",
+            pudf_fac_file_path,
             row.names = F
   )
 }else{
@@ -109,6 +109,11 @@ if(!file.exists(all_found_fac_path)){
   length(unique(dshs_hosp_df_for_join$PROVIDER_NAME_no_space)) # 648
   length(unique(dshs_hosp_df_for_join$ST_ADR_rm_suffix)) # 637, some duplicates but in diff city
   
+  # Start building city to county crosswalk
+  city_to_county_crosswalk = dshs_hosp_df_for_join %>%
+    dplyr::select(ZIP, CITY, COUNTY, STATE) %>%
+    distinct()
+  
   #/////////////////////////
   #### MATCH HOSP NAMES ####
   #/////////////////////////
@@ -136,6 +141,13 @@ if(!file.exists(all_found_fac_path)){
     dplyr::select(PROVIDER_NAME_clean, PROVIDER_NAME_no_space, 
                   starts_with("ST_ADR"),
                   ADDRESS:COUNTY_FIPS, PRVDR_NUM_list)
+  
+  # Add any new zip-city-county combinatins
+  # hhs only has county FIPS and not the name, we'll get that below
+  city_to_county_crosswalk = city_to_county_crosswalk %>%
+    bind_rows(hhs_hosp_df_tx) %>%
+    dplyr::select(ZIP, CITY, COUNTY, COUNTY_FIPS, STATE) %>%
+    distinct()
   
   #/////////////////////////
   #### MATCH HOSP NAMES ####
@@ -176,7 +188,6 @@ if(!file.exists(all_found_fac_path)){
     mutate(
       FAC_NAME_clean = norm_name_with_dict(clean_text_column(FAC_NAME), hosp_name_dict)
     ) %>%
-    dplyr::select(STATE_CD, CITY_NAME, ST_ADR, ZIP_CD, FAC_NAME_clean, everything()) %>%
     mutate(ST_ADR_clean = norm_name_with_dict(clean_text_column(ST_ADR), street_name_dict),
            ST_ADR_rm_suffix = remove_street_address_suffix(ST_ADR_clean)
     ) %>%
@@ -189,8 +200,17 @@ if(!file.exists(all_found_fac_path)){
     ) %>%
     slice(1) %>% # take only most recent certification date if all other location details the same
     ungroup() %>%
-    dplyr::select(FAC_NAME_clean_list, PRVDR_NUM_list, STATE_CD, CITY_NAME, ST_ADR, ST_ADR_clean, 
-                  ST_ADR_rm_suffix, ZIP_CD, FAC_NAME_clean, everything())
+    rename(ZIP=ZIP_CD, CITY=CITY_NAME, STATE=STATE_CD) %>%
+    mutate(COUNTY_FIPS = paste0(FIPS_STATE_CD, FIPS_CNTY_CD),
+           COUNTY_FIPS = ifelse(COUNTY_FIPS=="NANA", NA, COUNTY_FIPS)) %>%
+    dplyr::select(FAC_NAME_clean_list, PRVDR_NUM_list, STATE, CITY, ST_ADR, ST_ADR_clean, 
+                  ST_ADR_rm_suffix, ZIP, COUNTY_FIPS, FAC_NAME_clean, everything())
+  
+  # renamed cms_hosp_df cols to match, which is needed below
+  city_to_county_crosswalk = city_to_county_crosswalk %>%
+    bind_rows(cms_hosp_df) %>%
+    dplyr::select(ZIP, CITY, COUNTY, COUNTY_FIPS, STATE) %>%
+    distinct()
   
   #/////////////////////////
   #### MATCH HOSP NAMES ####
@@ -228,11 +248,34 @@ if(!file.exists(all_found_fac_path)){
     bind_rows(match_facility_names_hhs) # 661
   
   # used to match county fips to their names
-  county_fips = tidycensus::fips_codes %>%
-    filter(state=="TX") %>%
-    mutate(COUNTY = toupper(gsub(" County", "", county)),
-           COUNTY_FIPS = paste0(state_code, county_code)) %>%
-    select(COUNTY, COUNTY_FIPS)
+  county_fips = tidycensus::get_acs(geography="county", state="TX", variables="B01001A_001",
+                                    year=2022, geometry=F ) %>%
+    separate(NAME, into = c("county", "STATE"), sep=", ") %>%
+    mutate(COUNTY = toupper(gsub(" County", "", county))) %>%
+    rename(COUNTY_FIPS = GEOID, COUNTY_POP_2022=estimate) %>%
+    dplyr::select(COUNTY, COUNTY_FIPS, COUNTY_POP_2022)
+  
+  # ZIP-CITY-COUNTY crosswalk
+  hosp_city_to_county_crosswalk = city_to_county_crosswalk %>%
+    left_join(county_fips, by = "COUNTY_FIPS", suffix = c("", "_from_fips")) %>%
+    mutate(
+      COUNTY = coalesce(COUNTY, COUNTY_from_fips), # Fill COUNTY from FIPS-based lookup
+      COUNTY = ifelse(COUNTY=="DE WITT", "DEWITT", COUNTY),
+      STATE = "TX"
+    ) %>%
+    select(-ends_with("_from_fips")) %>% # Drop intermediate column
+    # Join by COUNTY to fill COUNTY_FIPS
+    left_join(county_fips, by = "COUNTY", suffix = c("", "_from_name")) %>%
+    mutate(
+      COUNTY_FIPS = coalesce(COUNTY_FIPS, COUNTY_FIPS_from_name), # Fill COUNTY_FIPS from name-based lookup
+    ) %>%
+    select(-ends_with("_from_name")) %>%
+    distinct() %>%
+    drop_na() %>%
+    arrange(ZIP, CITY, desc(COUNTY_POP_2022))
+  write.csv(hosp_city_to_county_crosswalk,
+            "../private_results/TX_zip-city-county_crosswalk.csv",
+            row.names = F)
   
   # Clean-up to only useful columns and merge duplicates
   all_found_hosp_clean = all_found_hosp %>%
@@ -273,6 +316,7 @@ if(!file.exists(all_found_fac_path)){
 
 }else{
   all_found_hosp_clean = read_csv(all_found_fac_path)
+  hosp_city_to_county_crosswalk = read_csv("../private_results/TX_zip-city-county_crosswalk.csv")
 } # end if all_hosp csv file exists
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,27 +342,56 @@ zcta_hosp_pairs = read_csv(paste0("../private_results/ZCTA-HOSP-PAIR_",
                                   disease, "_", date_range, ".csv"))
 hosp_catchments = read_csv(paste0("../private_results/HOSP_CATCHMENTS/HOSP-POP-CATCH_", 
                                   disease, "_", date_range, ".csv"))
-us_zcta_city_pop = get_zcta_acs_pop(state="US")
+# Get unique mapping of a ZCTA to a county and keep the ZIP city name
+zcta_to_county_crosswalk = 
+  read_csv("../big_input_data/US_ZCTA-COUNTY_pop-weighted_geocorr2022.csv") %>%
+  slice(-1) %>% # extra row of col descriptions
+  drop_na(zcta) %>%
+  rename(ZCTA = zcta, COUNTY_FIPS = county, 
+         # e.g. what proportion of ZIP code is in the county
+         ZCTA_COUNTY_ALLOCATION_FACTOR = afact) %>%
+  mutate(CountyName = toupper(iconv(CountyName, from = "UTF-8", to = "ASCII//TRANSLIT")),
+         ZIPName = toupper(iconv(ZIPName, from = "UTF-8", to = "ASCII//TRANSLIT")),
+         COUNTY = gsub(pattern = " [A-Z]{2}$", "", CountyName)) %>%
+  # Some NA but those ZCTA didn't have a city name
+  separate(ZIPName, into=c("CITY", "STATE"), sep=", ", extra = "merge") %>%
+  mutate(STATE = gsub(" \\(PO boxes\\)", "", STATE) ) %>%
+  dplyr::select(ZCTA_COUNTY_ALLOCATION_FACTOR, ZCTA, COUNTY, COUNTY_FIPS, STATE) # CITY, 
 
+# Make full cross-walk with city name from the ZIP to ZCTA pop-weighted crosswalk
+# Using CITY name from the zcta_to_county_crosswalk alone is less acurate
+us_zcta_city_pop = get_zcta_acs_pop(state="US") %>%
+  sf::st_drop_geometry() %>%
+  rename(ZCTA_POP_2022=estimate) %>%
+  left_join(zcta_to_county_crosswalk, 
+            by=c("ZCTA")) %>%
+  # Assign ZCTA to county where the majority of ZCTA is
+  group_by(ZCTA) %>%
+  arrange(desc(ZCTA_COUNTY_ALLOCATION_FACTOR), .by_group = T) %>%
+  slice(1) %>%
+  ungroup()
+
+# Get all THCIC_ID not found but needed
 not_found_fac_need = not_found_fac_all %>%
   # separate list to ensure none of the alias THCIC_IDs are missed
   separate_rows(THCIC_ID_list, sep = "; ") %>% # 264 rows
   # filter to all missing THCIC_ID's in catchment file only
   filter(THCIC_ID_list %in% hosp_catchments$HOSPITAL)# 64 rows when FLU, 80 when COV
-  
+
 # Taking the city as the location of top ZCTA visiting
 # On quick glance it looks pretty good
 #  Ones that don't match seem negligible like 
 #  Converse, TX => Warm Springs Rehab Hospital-San Antonio only has 1 FLU patient
 top_city_visit = zcta_hosp_pairs %>%
   filter(THCIC_ID %in% not_found_fac_need$THCIC_ID_list) %>%
-  mutate(across(PAT_ZIP:THCIC_ID, as.character) )%>%
-  left_join(us_zcta_city_pop %>%
-              sf::st_drop_geometry(),
-              by=c("PAT_ZIP"="ZCTA")) %>%
-  group_by(THCIC_ID, CITY_NAME) %>%
+  mutate(across(PAT_ZIP:THCIC_ID, as.character)) %>%
+  left_join(us_zcta_city_pop, 
+            by=c("PAT_ZIP"="ZCTA")) %>%
+  group_by(THCIC_ID, CITY_NAME, COUNTY, COUNTY_FIPS) %>%
   summarise(PAT_COUNT = sum(PAT_COUNT)) %>%
-  arrange(THCIC_ID, desc(PAT_COUNT)) %>%
+  ungroup() %>%
+  group_by(THCIC_ID) %>%
+  arrange(desc(PAT_COUNT), .by_group = T) %>%
   slice(1) %>%
   ungroup() %>%
   left_join(pudf_hosp_df, by="THCIC_ID") %>%
@@ -328,13 +401,15 @@ top_city_visit = zcta_hosp_pairs %>%
 # These look pretty good when PAT_COUNT >100 
 top_city_visit_check = top_city_visit %>%
   rowwise() %>%
-  mutate(city_name_present = ifelse(grepl(CITY, PROVIDER_NAME_clean, ignore.case =T), 
-                                    1, 0)) %>%
+  mutate(city_name_present = 
+           ifelse(grepl(CITY, PROVIDER_NAME_clean, ignore.case =T), 1, 0)) %>%
   ungroup() %>%
-  dplyr::select(city_name_present, CITY, PROVIDER_NAME_clean, PAT_COUNT)
+  dplyr::select(city_name_present, CITY, PROVIDER_NAME_clean, PAT_COUNT) %>%
+  arrange(city_name_present, desc(PAT_COUNT))
 
 # Join all the matched hospitals with our unmatched catchment set
 all_thcic_id_needed = all_found_hosp_clean %>%
+  mutate(across(everything(), as.character)) %>%
   bind_rows(top_city_visit) %>%
   dplyr::select(-PROVIDER_NAME, -PROVIDER_NAME_no_space, -FACILITY_TYPE) %>%
   mutate(CITY = toupper(CITY))
@@ -354,10 +429,6 @@ hosp_catchments_with_location = hosp_catchments %>%
   unnest(match, keep_empty = T) %>% # keep the THCIC_IDs that did not find a match
   ungroup() %>%
 # Do not remove any duplicate hospital names from catchment
-  # group_by(THCIC_ID) %>%
-  # mutate(multiple_IDs = n()) %>%
-  # #slice(1) %>%
-  # ungroup() %>%
   dplyr::select(INFO_ORIGIN, DATE_RANGE, DISEASE_INCLUDED, 
                 HOSPITAL, HOSP_CATCHMENT,
                 CITY, STATE, everything(), 
@@ -368,16 +439,6 @@ write.csv(
          disease, "_", date_range, ".csv"),
   row.names = F
   )
-
-
-
-
-
-
-
-
-
-
 
 
 
