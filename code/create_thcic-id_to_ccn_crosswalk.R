@@ -8,8 +8,8 @@
 # Emily Javan - 2024-11-27 - ATX
 #////////////////////////////////////////////////////////////////////////////
 
-#////////////////////////
-#### SOURCE FUNCTIONS ###
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#### SOURCE FUNCTIONS ####
 #////////////////////////
 # List of file paths to source
 files_to_source <- c(
@@ -336,7 +336,7 @@ if(!file.exists(missing_fac_path)){
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #### NEEDED FACILITIES ####
 # These files created by "run_estimation_fns.R"
-disease = "FLU-ILI-RSV" # hyphen separated alphabetical string
+disease = "FLU" # hyphen separated alphabetical string
 date_range = "2022Q3-2023Q2" # hyphen separated start-end date string e.g. 2018Q3-2019Q2
 zcta_hosp_pairs = read_csv(paste0("../private_results/ZCTA-HOSP-PAIR_", 
                                   disease, "_", date_range, ".csv"))
@@ -393,9 +393,9 @@ not_found_fac_need = not_found_fac_all %>%
 #  Converse, TX => Warm Springs Rehab Hospital-San Antonio only has 1 FLU patient
 top_city_visit = zcta_hosp_pairs %>%
   filter(THCIC_ID %in% not_found_fac_need$THCIC_ID_list) %>%
-  mutate(across(PAT_ZIP:THCIC_ID, as.character)) %>%
+  mutate(across(PAT_ZCTA:THCIC_ID, as.character)) %>%
   left_join(us_zcta_city_pop, 
-            by=c("PAT_ZIP"="ZCTA")) %>%
+            by=c("PAT_ZCTA"="ZCTA")) %>%
   group_by(THCIC_ID, CITY_NAME, COUNTY, COUNTY_FIPS) %>%
   summarise(PAT_COUNT = sum(PAT_COUNT)) %>%
   ungroup() %>%

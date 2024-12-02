@@ -501,7 +501,7 @@ categorize_patients_by_disease = function(date_range, icd10_df){
 #//////////////////////////////////////////////////////////////////////////////////////////////
 #' Clean IP PUDF files to ZCTA-Hosp pairs by ICD-10 code set
 count_patients_zcta_hosp_pairs = function(
-    date_range = c("2018Q4", "2020Q4"), # NULL for synthetic data set
+    date_range = c("2022Q3", "2023Q2"), # NULL for synthetic data set
     input_folder_path,
     optional_col_groupings = NULL, #c("YEAR", "QUARTER") or could be "DISCHARGE" for combination
     output_folder_path
@@ -514,10 +514,12 @@ count_patients_zcta_hosp_pairs = function(
   # Make date string
   date_range_string = paste0(date_range[1], "-", date_range[2])
   
+  # Open crosswalk from ZIPs to ZCTAs
+  zip_zcta_crosswalk = readxl::read_xlsx("../big_input_data/ZIPCode-to-ZCTA-Crosswalk.xlsx")
+  
   # Make output file path to check for
   output_file_path = paste0(output_folder_path, "ZCTA-HOSP-PAIR_", disease_choice_string,
                             "_",  date_range_string,".csv")
-  
   # Check if this output file exists
   if(!file.exists(output_file_path)){
     # List file in input_folder_path that satisfies date_range
@@ -540,15 +542,23 @@ count_patients_zcta_hosp_pairs = function(
         ungroup()
     } # end if we joined different disease datasets
     
-    # Remove where the Patient ZIP code is unknown
+    # Remove where the Patient ZIP code is unknown and translate ZIP to ZCTA
     clean_combine_data = combined_data %>%
       filter(!(PAT_ZIP=="88888" | is.na(PAT_ZIP))) %>% 
-      filter(nchar(PAT_ZIP)>=5)
+      filter(nchar(PAT_ZIP)>=5) %>%
+      left_join(zip_zcta_crosswalk, by=c("PAT_ZIP"="ZIP_CODE")) %>%
+      rename(PAT_ZCTA=zcta) %>%
+      mutate(PAT_ZCTA = ifelse(PAT_ZCTA=="75390", "75235", PAT_ZCTA), # Dallas ZIP w/o population, really tiny
+             PAT_ZCTA = ifelse(PAT_ZCTA=="78802", "78801", PAT_ZCTA) # Uvalde PO box not in crosswalk
+             )
+    
+    missing_zcta = sum(is.na(clean_combine_data$PAT_ZCTA))
+    ic(missing_zcta)
     
     # Group by PAT_ZIP and THCIC_ID to count patients per pair
     group_data = clean_combine_data %>%
       separate(DISCHARGE, into=c("YEAR", "QUARTER"), sep="Q", remove = F) %>%
-      group_by(PAT_ZIP, THCIC_ID, !!!syms(optional_col_groupings) ) %>%
+      group_by(PAT_ZCTA, THCIC_ID, !!!syms(optional_col_groupings) ) %>%
       summarise(PAT_COUNT = n(),
                 DATE_RANGE = date_range_string,
                 DISEASE_INCLUDED = disease_choice_string) %>%

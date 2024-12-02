@@ -30,3 +30,31 @@ Replacements to normalize street names, e.g. STREET to ST
 
 3. HospitalName_Replacements.csv
 Replacements to normalize hospital names, e.g. UNIVERSITY OF TEXAS to UT, etc.
+
+
+
+# big_input_data Files
+
+`zip_zcta_xref.csv` comes from [here](https://github.com/censusreporter/acs-aggregate/blob/master/crosswalks/zip_to_zcta/ZIP_ZCTA_README.md)
+which is 4 years old but still a good reference.
+
+`ZIPCode-to-ZCTA-Crosswalk.xlsx` is from [HRSA.gov](https://data.hrsa.gov/DataDownload/GeoCareNavigator/ZIP%20Code%20to%20ZCTA%20Crosswalk.xlsx)
+
+Another place to get ZIP code names is from the [US postal sevice](https://www.unitedstateszipcodes.org/tx/), 
+but this isn't a unique mapping of ZIP code to a city and provides no ZCTA mapping. However, when I need to look-up 
+a missing ZIP code this is a good reference to confirm. For example,
+
+```
+mutate(PAT_ZCTA = ifelse(PAT_ZCTA=="75390", "75235", PAT_ZCTA), # Dallas ZIP w/o population, really tiny
+       PAT_ZCTA = ifelse(PAT_ZCTA=="78802", "78801", PAT_ZCTA) # Uvalde PO box not in crosswalk
+      )
+```
+is hard coded into `count_patients_zcta_hosp_pairs` function because when I checked the output of `HOSP-CATCH-CALC_*`
+the number of patients leaving this ZIP code for flu/ILI treatment was larger than the population estimate or wasn't 
+in the ACS ZCTA download at all. 
+
+
+
+
+
+

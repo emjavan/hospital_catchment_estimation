@@ -104,7 +104,7 @@ input_folder_path <- c(
   "../private_input_data/PUDF_ILI/"
   #"../private_input_data/PUDF_COV/"
   )
-#input_folder_path = "../private_input_data/PUDF_FLU/"
+# input_folder_path = "../private_input_data/PUDF_FLU/"
 output_folder_path = "../private_results/"
 if(!dir.exists(output_folder_path)){dir.create(output_folder_path)}
 zcta_hosp_pairs = 
@@ -131,7 +131,7 @@ us_zcta_city_pop_no_geo = us_zcta_city_pop %>%
 hosp_catchments = 
   calculate_hospital_catchments(
     geom_hosp_df = zcta_hosp_pairs, 
-    geom_col = "PAT_ZIP", 
+    geom_col = "PAT_ZCTA", 
     hosp_col = "THCIC_ID", 
     pat_count_col = "PAT_COUNT",
     date_col = "DATE_RANGE", # optional but recommended
