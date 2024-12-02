@@ -72,7 +72,7 @@ measure_run_time <- function(func, ...) {
 #' Get TX ZCTA population and geometry
 get_zcta_acs_pop = function(
   census_api_key = CENSUS_API_KEY,
-  data_variables = "B01001A_001", # could change to vector of population by age
+  data_variables = "B01001_001", # could change to vector of population by age
   data_set_name = "population", # name whatever makes sense for data being pulled
   data_year = 2022, # default is ACS 2-year so 2022 is 2018-2022 average
   download_geometry = TRUE, 
@@ -162,7 +162,7 @@ get_zcta_acs_pop = function(
 #//////////////////////////////////////////////////////////////////////////////////////////////
 #' Get dates in a given range, dates of the type `YEAR`Q`QUARTER`
 get_dates_in_range = function(
-    date_range = c("2018Q3", "2023Q2")
+    date_range = c("2022Q3", "2023Q2")
     ){
   start_date = unlist(str_split(date_range[1], pattern="Q"))
   end_date = unlist(str_split(date_range[2], pattern="Q"))

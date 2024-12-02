@@ -248,7 +248,7 @@ if(!file.exists(all_found_fac_path)){
     bind_rows(match_facility_names_hhs) # 661
   
   # used to match county fips to their names
-  county_fips = tidycensus::get_acs(geography="county", state="TX", variables="B01001A_001",
+  county_fips = tidycensus::get_acs(geography="county", state="TX", variables="B01001_001",
                                     year=2022, geometry=F ) %>%
     separate(NAME, into = c("county", "STATE"), sep=", ") %>%
     mutate(COUNTY = toupper(gsub(" County", "", county))) %>%
@@ -336,8 +336,8 @@ if(!file.exists(missing_fac_path)){
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #### NEEDED FACILITIES ####
 # These files created by "run_estimation_fns.R"
-disease = "FLU" # hyphen separated alphabetical string
-date_range = "2017Q3-2019Q2" # hyphen separated start-end date string e.g. 2018Q3-2019Q2
+disease = "FLU-ILI-RSV" # hyphen separated alphabetical string
+date_range = "2022Q3-2023Q2" # hyphen separated start-end date string e.g. 2018Q3-2019Q2
 zcta_hosp_pairs = read_csv(paste0("../private_results/ZCTA-HOSP-PAIR_", 
                                   disease, "_", date_range, ".csv"))
 hosp_catchments = read_csv(paste0("../private_results/HOSP_CATCHMENTS/HOSP-POP-CATCH_", 
@@ -360,16 +360,25 @@ zcta_to_county_crosswalk =
 
 # Make full cross-walk with city name from the ZIP to ZCTA pop-weighted crosswalk
 # Using CITY name from the zcta_to_county_crosswalk alone is less acurate
-us_zcta_city_pop = get_zcta_acs_pop(state="US") %>%
-  sf::st_drop_geometry() %>%
-  rename(ZCTA_POP_2022=estimate) %>%
-  left_join(zcta_to_county_crosswalk, 
-            by=c("ZCTA")) %>%
-  # Assign ZCTA to county where the majority of ZCTA is
-  group_by(ZCTA) %>%
-  arrange(desc(ZCTA_COUNTY_ALLOCATION_FACTOR), .by_group = T) %>%
-  slice(1) %>%
-  ungroup()
+zcta_city_county_crosswalk_path = "../big_input_data/US_ZCTA-CITY-COUNTY_pop_2018-2022_acs.csv"
+if(!file.exists(zcta_city_county_crosswalk_path)){
+  us_zcta_city_pop = get_zcta_acs_pop(state="US") %>%
+    sf::st_drop_geometry() %>%
+    rename(ZCTA_POP_2022=estimate) %>%
+    left_join(zcta_to_county_crosswalk, 
+              by=c("ZCTA")) %>%
+    # Assign ZCTA to county where the majority of ZCTA is
+    group_by(ZCTA) %>%
+    arrange(desc(ZCTA_COUNTY_ALLOCATION_FACTOR), .by_group = T) %>%
+    slice(1) %>%
+    ungroup()
+  write.csv(us_zcta_city_pop,
+            "../big_input_data/US_ZCTA-CITY-COUNTY_pop_2018-2022_acs.csv",
+            row.names=F
+  )
+}else{
+  us_zcta_city_pop = read_csv(zcta_city_county_crosswalk_path)
+} # end if crosswalk file wasn't made
 
 # Get all THCIC_ID not found but needed
 not_found_fac_need = not_found_fac_all %>%
