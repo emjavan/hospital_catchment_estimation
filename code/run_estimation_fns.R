@@ -31,12 +31,6 @@ files_to_source <- c(
 # Source each file
 purrr::walk(files_to_source, source)
 
-# Make dir for figs if it doesn't exist
-fig_dir="../figures/"
-if(!dir.exists(fig_dir)){
-  dir.create(fig_dir)
-} # end if fig dir not made
-
 #////////////////////////
 #### ICD-10 DATA ####
 #////////////////////////
