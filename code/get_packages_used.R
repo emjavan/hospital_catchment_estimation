@@ -26,6 +26,6 @@ pacman::p_load(
   testthat, # ensure functions actually work
   tidycensus, # download ACS data and geometries
   sf, # for spatial plotting and st_drop_geometry
-  stringdist # needed to cluster similar strings
+  pdftools # extract data from PDF
 )
 

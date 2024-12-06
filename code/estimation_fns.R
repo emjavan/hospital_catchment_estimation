@@ -4,6 +4,113 @@
 # Emily Javan - ATX - 2024-11-25
 #////////////////////////////////////////////////////////////
 
+#////////////////////////////////////////////////////////////
+#' Function to remove lines that aren't relevant to hospital name and city
+#' @param page_text A character vector representing the raw text of a single PDF page, 
+#' where each element is a line of text.
+remove_useless_lines <- function(page_text) {
+  lines <- str_split(page_text, "\n")[[1]] %>% 
+    str_trim()
+  
+  # Remove known headers or footers
+  lines <- lines[!str_detect(lines, "^(OC|\\*|Report|With |1Q23|Public|x|Comment|Total|Texas Hospital In|Page|\\s*$)")]
+  lines <- lines[!str_detect(lines, "Inpatient Reporting|Closed|compliance|discharges|their|Note|Dictionary")]
+  
+  return(lines)
+} # end function
+
+#////////////////////////////////////////////////////////////
+#' Parse Hospital Data from Page Text
+#'
+#' Processes text data from a single page of a PDF, identifying cities and hospital entries. 
+#' The function assumes hospital entries start with a 6-digit ID, and cities are matched 
+#' against a predefined list. Multi-line hospital names are flagged and managed.
+#'
+#' @param page_text A character vector representing the raw text of a single PDF page, 
+#' where each element is a line of text.
+parse_page <- function(page_text) {
+  
+  # Clean-up lines of page text
+  lines <- parse_page_raw(page_text) %>%
+    toupper()
+  
+  # Create variables & df needed in loop
+  data <- tibble(
+    CITY = character(),
+    ID_Hospital = character(),
+    Reports_With = character(),
+    Q1 =character(),
+    Comment_1 = character(),
+    Q2 = character(),
+    Comment_2 = character(),
+    Q3 = character(),
+    Comment_3 = character(),
+    Q4 = character(),
+    Comment_4 = character()
+  )
+  current_city <- NULL
+  current_hospital <- NULL
+  
+  # Loop over lines in page to split up and add to data frame
+  for (line in lines) {
+    # Start a new hospital entry
+    current_hospital <- line
+    
+    # Check if the line is a city
+    # CENTER is a city in TX but not a city with hospitals
+    if ((line %in% texas_cities$CITY) & !(line=="CENTER") ) {
+      current_city <- line
+      ic(current_city)
+      next
+    } # end if line starts with a city name
+    
+    # Check if the line starts with a 6-digit ID (hospital entry)
+    if (str_detect(line, "^\\d{6}\\b")) {
+      # Save the previous hospital entry if it exists
+      hospital_data <- str_split(current_hospital, "\\s{2,}", simplify = TRUE)
+      hospital_data <- c(hospital_data, rep(NA, 11 - length(hospital_data))) # Pad with NA
+      
+      new_hosp_line = tibble(
+        CITY = current_city,
+        ID_Hospital = hospital_data[1],
+        Reports_With = hospital_data[2],
+        Q1 = hospital_data[3],
+        Comment_1 = hospital_data[4],
+        Q2 = hospital_data[5],
+        Comment_2 = hospital_data[6],
+        Q3 = hospital_data[7],
+        Comment_3 = hospital_data[8],
+        Q4 = hospital_data[9],
+        Comment_4 = hospital_data[10])
+      data = data %>%
+        bind_rows(new_hosp_line)
+    } else {
+      # Flag hospital names that run on to two lines
+      hospital_data <- str_split(current_hospital, "\\s{2,}", simplify = TRUE)
+      hospital_data <- c(hospital_data, rep(NA, 11 - length(hospital_data))) # Pad with NA
+      
+      new_hosp_line = tibble(
+        CITY = "ABOVE",
+        ID_Hospital = hospital_data[1],
+        Reports_With = hospital_data[2],
+        Q1 = hospital_data[3],
+        Comment_1 = hospital_data[4],
+        Q2 = hospital_data[5],
+        Comment_2 = hospital_data[6],
+        Q3 = hospital_data[7],
+        Comment_3 = hospital_data[8],
+        Q4 = hospital_data[9],
+        Comment_4 = hospital_data[10])
+      data = data %>%
+        bind_rows(new_hosp_line)
+    } # end if line starts with ID or a non-city word
+  } # end for loop over lines in file
+  
+  return(data)
+} # end function 
+
+
+
 
 #////////////////////////////////////////////////////////////
 #' Clean a text col to get rid of unknown characters or 
