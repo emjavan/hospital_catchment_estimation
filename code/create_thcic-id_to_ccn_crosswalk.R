@@ -342,26 +342,28 @@ zcta_hosp_pairs = read_csv(paste0("../private_results/ZCTA-HOSP-PAIR_",
                                   disease, "_", date_range, ".csv"))
 hosp_catchments = read_csv(paste0("../private_results/HOSP_CATCHMENTS/HOSP-POP-CATCH_", 
                                   disease, "_", date_range, ".csv"))
-# Get unique mapping of a ZCTA to a county and keep the ZIP city name
-zcta_to_county_crosswalk = 
-  read_csv("../big_input_data/US_ZCTA-COUNTY_pop-weighted_geocorr2022.csv") %>%
-  slice(-1) %>% # extra row of col descriptions
-  drop_na(zcta) %>%
-  rename(ZCTA = zcta, COUNTY_FIPS = county, 
-         # e.g. what proportion of ZIP code is in the county
-         ZCTA_COUNTY_ALLOCATION_FACTOR = afact) %>%
-  mutate(CountyName = toupper(iconv(CountyName, from = "UTF-8", to = "ASCII//TRANSLIT")),
-         ZIPName = toupper(iconv(ZIPName, from = "UTF-8", to = "ASCII//TRANSLIT")),
-         COUNTY = gsub(pattern = " [A-Z]{2}$", "", CountyName)) %>%
-  # Some NA but those ZCTA didn't have a city name
-  separate(ZIPName, into=c("CITY", "STATE"), sep=", ", extra = "merge") %>%
-  mutate(STATE = gsub(" \\(PO boxes\\)", "", STATE) ) %>%
-  dplyr::select(ZCTA_COUNTY_ALLOCATION_FACTOR, ZCTA, COUNTY, COUNTY_FIPS, STATE) # CITY, 
 
 # Make full cross-walk with city name from the ZIP to ZCTA pop-weighted crosswalk
-# Using CITY name from the zcta_to_county_crosswalk alone is less acurate
+# Using CITY name from the zcta_to_county_crosswalk alone is less accurate
 zcta_city_county_crosswalk_path = "../big_input_data/US_ZCTA-CITY-COUNTY_pop_2018-2022_acs.csv"
 if(!file.exists(zcta_city_county_crosswalk_path)){
+  
+  # Get unique mapping of a ZCTA to a county and keep the ZIP city name
+  zcta_to_county_crosswalk = 
+    read_csv("../big_input_data/US_ZCTA-COUNTY_pop-weighted_geocorr2022.csv") %>%
+    slice(-1) %>% # extra row of col descriptions
+    drop_na(zcta) %>%
+    rename(ZCTA = zcta, COUNTY_FIPS = county, 
+           # e.g. what proportion of ZIP code is in the county
+           ZCTA_COUNTY_ALLOCATION_FACTOR = afact) %>%
+    mutate(CountyName = toupper(iconv(CountyName, from = "UTF-8", to = "ASCII//TRANSLIT")),
+           ZIPName = toupper(iconv(ZIPName, from = "UTF-8", to = "ASCII//TRANSLIT")),
+           COUNTY = gsub(pattern = " [A-Z]{2}$", "", CountyName)) %>%
+    # Some NA but those ZCTA didn't have a city name
+    separate(ZIPName, into=c("CITY", "STATE"), sep=", ", extra = "merge") %>%
+    mutate(STATE = gsub(" \\(PO boxes\\)", "", STATE) ) %>%
+    dplyr::select(ZCTA_COUNTY_ALLOCATION_FACTOR, ZCTA, COUNTY, COUNTY_FIPS, STATE) # CITY, 
+  
   us_zcta_city_pop = get_zcta_acs_pop(state="US") %>%
     sf::st_drop_geometry() %>%
     rename(ZCTA_POP_2022=estimate) %>%
