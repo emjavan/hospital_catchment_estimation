@@ -3,6 +3,10 @@
 # File from PUDF page for the specific year
 #///////////////////////////////////////////////////////////////////////
 
+# To Do
+# Loop/pmap/lapply over all the years of files to get list of all
+#  THCIC_IDs reporting together
+
 # Load packages and disable ic if you don't want debugging/verbose
 source("get_packages_used.R")
 source("estimation_fns.R")
@@ -36,7 +40,9 @@ hosp_data = parse_page(hosp_pdf_text) %>%
   dplyr::select(-(Q1:Comment_4)) %>%
   mutate(Reports_With = ifelse(str_detect(Reports_With, "^\\d{6}\\b"), Reports_With, NA)) %>%
   separate(ID_Hospital, into=c("THCIC_ID", "HOSP_NAME"), 
-           sep = "\\s", extra = "merge")
+           sep = "\\s", extra = "merge") %>%
+  rename(HOSP_CITY = CITY,
+         HOSP_REPORTS_WITH_THCIC_ID = Reports_With)
 
 # Write cleaned PDF into an easy to use CSV
 output_file_path = paste0("../input_data/PUDF_hospital-name-to-city_",  year, "Q", quarter_number, ".csv")
