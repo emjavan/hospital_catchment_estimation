@@ -31,7 +31,7 @@ remove_useless_lines <- function(page_text) {
 parse_page <- function(page_text) {
   
   # Clean-up lines of page text
-  lines <- parse_page_raw(page_text) %>%
+  lines <- remove_useless_lines(page_text) %>%
     toupper()
   
   # Create variables & df needed in loop
