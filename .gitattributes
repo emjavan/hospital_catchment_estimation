@@ -1,0 +1,9 @@
+# Classify all .sh as bash scripts
+*.sh linguist-language=Shell
+
+# Classify all R files as R language
+*.R linguist-language=R
+
+# Ignore classifying job scripts
+*.e linguist-generated
+*.o linguist-generated
