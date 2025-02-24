@@ -27,6 +27,24 @@ done
 # Base directory containing the files
 BASE_DIR="../private_input_data/OG_PUDF_DATA"
 
+# Function to replace double underscores with a single underscore in all file names
+remove_double_underscores() {
+  find "$BASE_DIR" -type f -name "*__*" | while read -r file; do
+    dir=$(dirname "$file")
+    base=$(basename "$file")
+    # Replace any occurrence of double underscore with a single underscore
+    new_base=$(echo "$base" | sed 's/__/_/g')
+    # Only rename if there's a change
+    if [ "$base" != "$new_base" ]; then
+      echo "Cleaning: $file -> $dir/$new_base"
+      mv "$file" "$dir/$new_base"
+    fi
+  done
+}
+
+# Call the cleaning function before processing the filenames
+remove_double_underscores
+
 # Rename files to the 2023 standard format
 standardize_filenames() {
   find "$BASE_DIR" -type f | while read -r file; do
@@ -34,7 +52,7 @@ standardize_filenames() {
     filename=$(basename "$file")
 
     # Extract components from the filename using a robust regex
-    if [[ "$filename" =~ ([a-zA-Z_]+)(_base[0-9]*|_grouper|_charges|_facility_type)?_([0-9]+)q([0-9]+)(_tab\.txt) ]]; then
+    if [[ "$filename" =~ ([a-zA-Z_]+)(_base[0-9]*|_grouper|_charges|_facility_type)?_?([0-9]+)q([0-9]+)(_tab\.txt) ]]; then
       prefix="${BASH_REMATCH[1]}"          # e.g., "PUDF"
       type_suffix="${BASH_REMATCH[2]}"     # e.g., "_base1", "_grouper"
       quarter="${BASH_REMATCH[3]}"         # e.g., "4"
@@ -45,6 +63,8 @@ standardize_filenames() {
       case "$type_suffix" in
         _base1) standardized_prefix="IP_PUDF_BASE_DATA_1" ;;
         _base2) standardized_prefix="IP_PUDF_BASE_DATA_2" ;;
+        _grouper) standardized_prefix="IP_PUDF_GROUPER" ;;
+        _charges) standardized_prefix="IP_PUDF_CHARGES" ;;
         *) standardized_prefix="${prefix}${type_suffix}" ;; # Fallback to original
       esac
 
@@ -115,3 +135,27 @@ fix_filenames() {
 
 # Execute the function
 fix_filenames
+
+# Final check: Ensure all files start with "IP_PUDF_" and capitalization of filename after
+fix_missing_ip_prefix() {
+  find "$BASE_DIR" -type f | while read -r file; do
+    dir=$(dirname "$file")
+    filename=$(basename "$file")
+    # Check if filename starts with "PUDF_"
+    if [[ "$filename" =~ ^PUDF_ ]]; then
+      # Split the filename at underscores
+      prefix=$(echo "$filename" | cut -d'_' -f1)         # "PUDF"
+      token=$(echo "$filename" | cut -d'_' -f2)          # e.g., "charges"
+      rest=$(echo "$filename" | cut -d'_' -f3-)          # the rest of the filename
+
+      # Convert token to uppercase
+      token_upper=$(echo "$token" | tr '[:lower:]' '[:upper:]')
+      new_filename="IP_${prefix}_${token_upper}_${rest}"
+      
+      echo "Fixing prefix: Renaming $file -> $dir/$new_filename"
+      mv "$file" "$dir/$new_filename"
+    fi
+  done
+}
+
+fix_missing_ip_prefix
