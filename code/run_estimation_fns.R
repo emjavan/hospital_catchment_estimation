@@ -41,9 +41,9 @@ icd10_df = read_csv("../input_data/icd10_disease_category_list.csv")
 #////////////////////////////////////////
 #### CATEGORIZE PUDF DATA BY DISEASE ####
 #////////////////////////////////////////
-frontera = FALSE
-if(frontera){
-  # This takes so long to run had to change to parallel script on Frontera
+LS6 = TRUE
+if(LS6){
+  # This takes so long to run had to change to parallel script on LS6
   args       = commandArgs(TRUE)
   date       = as.character(args[1])
   date_range = c(date, date) # e.g. "2023Q1", "2023Q1"
@@ -52,7 +52,7 @@ if(frontera){
     date_range = date_range,
     icd10_df = icd10_df
   )
-} # end if running locally or on TACC Frontera
+} # end if running locally or on TACC LS6
 
 #/////////////////////
 #### ZCTA POP ####
@@ -90,7 +90,7 @@ zcta_per_city = us_zcta_city_pop %>%
 
 # R crashes when I run over long time period which I assume is due to 
 #  needing distinct RECORD_ID's +
-#  too much data for local machine??? Will try on Frontera
+#  too much data for local machine??? Will try on LS6
 
 input_folder_path <- c(
   "../private_input_data/PUDF_FLU/",
