@@ -580,7 +580,8 @@ categorize_patients_by_disease = function(date_range, icd10_df){
           
           # Write disease specific categorized file with a date of creation
           message("File will be written to ",output_file_path_single, "\n")
-          write.csv(categorized_pudf_per_disease, output_file_path_single, row.names=F)
+          write.csv(categorized_pudf_per_disease, output_file_path_single, 
+                    fileEncoding = "UTF-8", row.names=F)
           
           # Keep track of if the expected file was created
           # Find the index of the matching file path in output_file_path_df
@@ -672,7 +673,8 @@ count_patients_zcta_hosp_pairs = function(
       ungroup()
     
     # Save output to file
-    write.csv(group_data, output_file_path, row.names = F)
+    write.csv(group_data, output_file_path, 
+              fileEncoding = "UTF-8", row.names = F)
   }else{
     group_data = read_csv(output_file_path)
   } # end if this date-disease combination exists
@@ -780,7 +782,7 @@ calculate_hospital_catchments <- function(
     if(!is.null(calculation_outputfile_path)){
       write.csv(geom_hosp_needed_cols_df, 
                 calculation_outputfile_path, 
-                row.names = FALSE)
+                fileEncoding = "UTF-8", row.names = FALSE)
     }
     
     # Summarize catchment population by hospital
