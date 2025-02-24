@@ -250,7 +250,7 @@ if(!file.exists(all_found_fac_path)){
   # used to match county fips to their names
   county_fips = tidycensus::get_acs(geography="county", state="TX", variables="B01001_001",
                                     year=2022, geometry=F ) %>%
-    separate(NAME, into = c("county", "STATE"), sep=", ") %>%
+    separate(NAME, into = c("county", "STATE"), sep=", ", extra="merge") %>%
     mutate(COUNTY = toupper(gsub(" County", "", county))) %>%
     rename(COUNTY_FIPS = GEOID, COUNTY_POP_2022=estimate) %>%
     dplyr::select(COUNTY, COUNTY_FIPS, COUNTY_POP_2022)
@@ -334,6 +334,21 @@ if(!file.exists(missing_fac_path)){
 } # end if missing hosps file not found
 
 #////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#### CITY NAMES PUDF ####
+
+pudf_city_names = read_csv("../input_data/PUDF_hospital-name-to-city_2023Q4.csv")
+
+not_found_fac_all %>%
+  left_join(pudf_city_names, by="THCIC_ID")
+
+
+
+# write all the facilities to a file with city + county
+
+
+
+
+#////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #### NEEDED FACILITIES ####
 # These files created by "run_estimation_fns.R"
 disease = "FLU" # hyphen separated alphabetical string
@@ -370,11 +385,17 @@ if(!file.exists(zcta_city_county_crosswalk_path)){
     rename(ZCTA_POP_2022=estimate) %>%
     left_join(zcta_to_county_crosswalk, 
               by=c("ZCTA")) %>%
-    # Assign ZCTA to county where the majority of ZCTA is
+    # Assign ZCTA to county where the majority/largest allocation of ZCTA is
     group_by(ZCTA) %>%
     arrange(desc(ZCTA_COUNTY_ALLOCATION_FACTOR), .by_group = T) %>%
     slice(1) %>%
     ungroup()
+  
+  
+  #### Write check for any NA state or ZIP not assigned to city name ####
+  # e.g. 32072, FL not showing real name of ZIP & some ZIPs in Guam
+  # Joined with "../input_data/ZIPCode-to-ZCTA-Crosswalk.xlsx" a lot of NA city names
+  
   write.csv(us_zcta_city_pop,
             "../big_input_data/US_ZCTA-CITY-COUNTY_pop_2018-2022_acs.csv",
             row.names=F
@@ -407,7 +428,7 @@ top_city_visit = zcta_hosp_pairs %>%
   slice(1) %>%
   ungroup() %>%
   left_join(pudf_hosp_df, by="THCIC_ID") %>%
-  separate(CITY_NAME, into=c("CITY", "STATE"), sep=", ") %>%
+  separate(CITY_NAME, into=c("CITY", "STATE"), sep=", ", extra="merge") %>%
   mutate(INFO_ORIGIN="CATCHMENT")
 
 # These look pretty good when PAT_COUNT >100 
