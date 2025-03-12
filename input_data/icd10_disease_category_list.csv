@@ -1,95 +1,142 @@
-ICD10_CODE,CODE_STARTS_WITH,ICD10_3CHAR_SUBSTRING,DESCRIP,DISEASE_CAT,START_YEAR,START_QUARTER,SOURCE
-J1282,F,J12,Pneumonia due to coronavirus disease 2019,COV,2019,4,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-U071,F,U07,COVID-19,COV,2019,4,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J09,T,J09,Influenza due to certain identified influenza viruses,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J10,T,J10,Influenza due to other identified influenza viruses,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J11,T,J11,Influenza due to unidentified influenza virus,FLU,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-B974,F,B97,Respiratory syncytial virus (RSV) as the cause of diseases classified elsewhere,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J121,F,J12,Respiratory syncytial virus pneumonia,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J205,F,J20,Acute bronchitis due to respiratory syncytial virus,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J210,F,J21,Acute bronchiolitis due to respiratory syncytial virus,RSV,,,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html
-J00,T,J00,acute nasopharyngitis; common cold,ILI,,,https://www.health.mil/Reference-Center/Publications/2015/10/01/Influenza-Like-Illness
-J122,F,J12,Parainfluenza virus pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
-J123,F,J12,Human metapneumovirus pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
-J1281,F,J12,Pneumonia due to SARS-associated coronavirus,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
-J1289,F,J12,Other viral pneumonia,ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
-J129,F,J12,"Viral pneumonia, unspecified",ILI,,,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-
-J45,T,J45,Asthma,HighRiskAsthma,,,"CDC increased flu risk, Asthma"
-J449,F,J44,"Chronic obstructive pulmonary disease, unspecified",HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-J439,F,J43,"Emphysema, unspecified",HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-J42,T,J42,Unspecified chronic bronchitis,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-J47,T,J47,Bronchiectasis,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-E84,T,E84,Cystic fibrosis,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-J841,F,J84,Other interstitial pulmonary diseases with fibrosis,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-J60,T,J60,Pneumoconiosis due to mineral dust,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-D860,F,D86,Sarcoidosis of lung,HighRiskChronicLungDisease,,,"CDC increased flu risk, ChronicLungDisease"
-G40,T,G40,Epilepsy and recurrent seizures,HighRiskNeurologicConditions,,,"CDC increased flu risk, NeurologicConditions"
-G35,T,G35,Multiple sclerosis,HighRiskNeurologicConditions,,,"CDC increased flu risk, NeurologicConditions"
-G20,T,G20,Parkinson's disease,HighRiskNeurologicConditions,,,"CDC increased flu risk, NeurologicConditions"
-G11,T,G11,Hereditary ataxia,HighRiskNeurologicConditions,,,"CDC increased flu risk, NeurologicConditions"
-G12,T,G12,Spinal muscular atrophy and related disorders,HighRiskNeurologicConditions,,,"CDC increased flu risk, NeurologicConditions"
-D57,T,D57,Sickle cell disorders,HighRiskBloodDisorders,,,"CDC increased flu risk, BloodDisorders"
-D55,T,D55,Anemia due to enzyme disorders,HighRiskBloodDisorders,,,"CDC increased flu risk, BloodDisorders"
-D58,T,D58,Other hereditary hemolytic anemias,HighRiskBloodDisorders,,,"CDC increased flu risk, BloodDisorders"
-E10,T,E10,Type 1 diabetes mellitus,HighRiskEndocrineDisorders,,,"CDC increased flu risk, EndocrineDisorders"
-E11,T,E11,Type 2 diabetes mellitus,HighRiskEndocrineDisorders,,,"CDC increased flu risk, EndocrineDisorders"
-E13,T,E13,Other specified diabetes mellitus,HighRiskEndocrineDisorders,,,"CDC increased flu risk, EndocrineDisorders"
-I42,T,I42,Cardiomyopathy,HighRiskHeartDisease,,,"CDC increased flu risk, HeartDisease"
-I50,T,I50,Heart failure,HighRiskHeartDisease,,,"CDC increased flu risk, HeartDisease"
-I25,T,I25,Chronic ischemic heart disease,HighRiskHeartDisease,,,"CDC increased flu risk, HeartDisease"
-Q20,T,Q20,Congenital heart malformations,HighRiskHeartDisease,,,"CDC increased flu risk, HeartDisease"
-Q21,T,Q21,Congenital heart septal defects,HighRiskHeartDisease,,,"CDC increased flu risk, HeartDisease"
-N18,T,N18,Chronic kidney disease,HighRiskKidneyDisorders,,,"CDC increased flu risk, KidneyDisorders"
-N17,T,N17,Acute kidney failure,HighRiskKidneyDisorders,,,"CDC increased flu risk, KidneyDisorders"
-K74,T,K74,Fibrosis and cirrhosis of liver,HighRiskLiverDisorders,,,"CDC increased flu risk, LiverDisorders"
-K72,T,K72,Hepatic failure,HighRiskLiverDisorders,,,"CDC increased flu risk, LiverDisorders"
-K76,T,K76,Other liver diseases,HighRiskLiverDisorders,,,"CDC increased flu risk, LiverDisorders"
-E70,T,E70,Disorders of aromatic amino-acid metabolism,HighRiskMetabolicDisorders,,,"CDC increased flu risk, MetabolicDisorders"
-E71,T,E71,Disorders of branched-chain amino-acid metabolism,HighRiskMetabolicDisorders,,,"CDC increased flu risk, MetabolicDisorders"
-E72,T,E72,Other disorders of amino-acid metabolism,HighRiskMetabolicDisorders,,,"CDC increased flu risk, MetabolicDisorders"
-G3182,F,G31,Mitochondrial disease,HighRiskMetabolicDisorders,,,"CDC increased flu risk, MetabolicDisorders"
-E6601,F,E66,Morbid (severe) obesity due to excess calories,HighRiskObesity,,,"CDC increased flu risk, Obesity"
-E6609,F,E66,Other obesity due to excess calories,HighRiskObesity,,,"CDC increased flu risk, Obesity"
-B20,T,B20,HIV disease,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-C81,T,C81,Hodgkin lymphoma,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-C82,T,C82,Follicular lymphoma,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-C83,T,C83,Non-follicular lymphoma,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-C91,T,C91,Lymphoid leukemia,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-C92,T,C92,Myeloid leukemia,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-Z7952,F,Z79,Long-term (current) use of systemic steroids,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-Z7982,F,Z79,Long-term (current) use of immunosuppressive drugs,HighRiskWeakenedImmuneSystem,,,"CDC increased flu risk, WeakenedImmuneSystem"
-I63,T,I63,Cerebral infarction,HighRiskStroke,,,"CDC increased flu risk, Stroke"
-I64,T,I64,"Stroke, not specified as hemorrhage or infarction",HighRiskStroke,,,"CDC increased flu risk, Stroke"
-I693,F,I69,Sequelae of cerebral infarction,HighRiskStroke,,,"CDC increased flu risk, Stroke"
-G122,F,G12,Motor neuron disease,HighRiskDisabilitiesAffectingRespiration,,,"CDC increased flu risk, DisabilitiesAffectingRespiration"
-G80,T,G80,Cerebral palsy,HighRiskDisabilitiesAffectingRespiration,,,"CDC increased flu risk, DisabilitiesAffectingRespiration"
-G71,T,G71,Primary disorders of muscle,HighRiskDisabilitiesAffectingRespiration,,,"CDC increased flu risk, DisabilitiesAffectingRespiration"
-J986,F,J98,Diaphragmatic paralysis and respiratory insufficiency,HighRiskDisabilitiesAffectingRespiration,,,"CDC increased flu risk, DisabilitiesAffectingRespiration"
-Z331,F,Z33,"Pregnant state, incidental",LowRiskPregnancy,,,"CDC increased flu risk, LowRiskPregnancy"
-Z34,T,Z34,Encounter for supervision of normal pregnancy,LowRiskPregnancy,,,"CDC increased flu risk, LowRiskPregnancy"
-Z3A,T,Z3A,Weeks of gestation,LowRiskPregnancy,,,"CDC increased flu risk, LowRiskPregnancy"
-O20,T,O20,Hemorrhage in early pregnancy,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O21,T,O21,Excessive vomiting in pregnancy,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O24,T,O24,Gestational diabetes mellitus,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O26,T,O26,Maternal care for other conditions related to pregnancy,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O28,T,O28,Abnormal findings on antenatal screening,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O29,T,O29,Complications of anesthesia during pregnancy,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O30,T,O30,"Multiple gestation (twins, triplets, etc.)",MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O36,T,O36,Maternal care for known or suspected fetal problems,MediumRiskPregnancy,,,"CDC increased flu risk, MediumRiskPregnancy"
-O10,T,O10,Pre-existing hypertension complicating pregnancy,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O11,T,O11,Pre-existing hypertension with pre-eclampsia,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O12,T,O12,Gestational edema and proteinuria without hypertension,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O13,T,O13,Gestational hypertension without significant proteinuria,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O14,T,O14,Pre-eclampsia,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O15,T,O15,Eclampsia,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O16,T,O16,Unspecified maternal hypertension,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O31,T,O31,Complications specific to multiple gestation,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O42,T,O42,Premature rupture of membranes (PROM),HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O44,T,O44,Placenta previa,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O45,T,O45,Placental abruption,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O60,T,O60,Preterm labor,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O70,T,O70,Perineal laceration during delivery,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O72,T,O72,Postpartum hemorrhage,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O75,T,O75,Other complications of labor and delivery,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O85,T,O85,Puerperal sepsis,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
-O90,T,O90,Complications of the puerperium,HighRiskPregnancy,,,"CDC increased flu risk, HighRiskPregnancy"
+ICD10_CODE,CODE_STARTS_WITH,ICD10_3CHAR_SUBSTRING,DESCRIP,DISEASE_CAT,SOURCE,START_YEAR,START_QUARTER
+J1282,F,J12,Pneumonia due to coronavirus disease 2019,COV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,2019,4
+U071,F,U07,COVID-19,COV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,2019,4
+J09,T,J09,Influenza due to certain identified influenza viruses,FLU,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J10,T,J10,Influenza due to other identified influenza viruses,FLU,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J11,T,J11,Influenza due to unidentified influenza virus,FLU,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+B974,F,B97,Respiratory syncytial virus (RSV) as the cause of diseases classified elsewhere,RSV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J121,F,J12,Respiratory syncytial virus pneumonia,RSV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J205,F,J20,Acute bronchitis due to respiratory syncytial virus,RSV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J210,F,J21,Acute bronchiolitis due to respiratory syncytial virus,RSV,https://www.cdc.gov/nssp/php/onboarding-resources/companion-guide-ed-data-respiratory-illness.html,,
+J00,T,J00,acute nasopharyngitis; common cold,ILI,https://www.health.mil/Reference-Center/Publications/2015/10/01/Influenza-Like-Illness,,
+J122,F,J12,Parainfluenza virus pneumonia,ILI,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-,,
+J123,F,J12,Human metapneumovirus pneumonia,ILI,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-,,
+J1281,F,J12,Pneumonia due to SARS-associated coronavirus,ILI,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-,,
+J1289,F,J12,Other viral pneumonia,ILI,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-,,
+J129,F,J12,Viral pneumonia unspecified,ILI,https://www.icd10data.com/ICD10CM/Codes/J00-J99/J09-J18/J12-,,
+J45,T,J45,Asthma,HighRiskAsthma,CDC increased flu risk  Asthma,,
+J449,F,J44,Chronic obstructive pulmonary disease  unspecified,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+J439,F,J43,Emphysema  unspecified,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+J42,T,J42,Unspecified chronic bronchitis,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+J47,T,J47,Bronchiectasis,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+E84,T,E84,Cystic fibrosis,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+J841,F,J84,Other interstitial pulmonary diseases with fibrosis,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+J60,T,J60,Pneumoconiosis due to mineral dust,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+D860,F,D86,Sarcoidosis of lung,HighRiskChronicLungDisease,CDC increased flu risk  ChronicLungDisease,,
+G40,T,G40,Epilepsy and recurrent seizures,HighRiskNeurologicConditions,CDC increased flu risk  NeurologicConditions,,
+G35,T,G35,Multiple sclerosis,HighRiskNeurologicConditions,CDC increased flu risk  NeurologicConditions,,
+G20,T,G20,Parkinson's disease,HighRiskNeurologicConditions,CDC increased flu risk  NeurologicConditions,,
+G11,T,G11,Hereditary ataxia,HighRiskNeurologicConditions,CDC increased flu risk  NeurologicConditions,,
+G12,T,G12,Spinal muscular atrophy and related disorders,HighRiskNeurologicConditions,CDC increased flu risk  NeurologicConditions,,
+D57,T,D57,Sickle cell disorders,HighRiskBloodDisorders,CDC increased flu risk  BloodDisorders,,
+D55,T,D55,Anemia due to enzyme disorders,HighRiskBloodDisorders,CDC increased flu risk  BloodDisorders,,
+D58,T,D58,Other hereditary hemolytic anemias,HighRiskBloodDisorders,CDC increased flu risk  BloodDisorders,,
+E10,T,E10,Type 1 diabetes mellitus,HighRiskEndocrineDisorders,CDC increased flu risk  EndocrineDisorders,,
+E11,T,E11,Type 2 diabetes mellitus,HighRiskEndocrineDisorders,CDC increased flu risk  EndocrineDisorders,,
+E13,T,E13,Other specified diabetes mellitus,HighRiskEndocrineDisorders,CDC increased flu risk  EndocrineDisorders,,
+I42,T,I42,Cardiomyopathy,HighRiskHeartDisease,CDC increased flu risk  HeartDisease,,
+I50,T,I50,Heart failure,HighRiskHeartDisease,CDC increased flu risk  HeartDisease,,
+I25,T,I25,Chronic ischemic heart disease,HighRiskHeartDisease,CDC increased flu risk  HeartDisease,,
+Q20,T,Q20,Congenital heart malformations,HighRiskHeartDisease,CDC increased flu risk  HeartDisease,,
+Q21,T,Q21,Congenital heart septal defects,HighRiskHeartDisease,CDC increased flu risk  HeartDisease,,
+N18,T,N18,Chronic kidney disease,HighRiskKidneyDisorders,CDC increased flu risk  KidneyDisorders,,
+N17,T,N17,Acute kidney failure,HighRiskKidneyDisorders,CDC increased flu risk  KidneyDisorders,,
+K74,T,K74,Fibrosis and cirrhosis of liver,HighRiskLiverDisorders,CDC increased flu risk  LiverDisorders,,
+K72,T,K72,Hepatic failure,HighRiskLiverDisorders,CDC increased flu risk  LiverDisorders,,
+K76,T,K76,Other liver diseases,HighRiskLiverDisorders,CDC increased flu risk  LiverDisorders,,
+E70,T,E70,Disorders of aromatic amino-acid metabolism,HighRiskMetabolicDisorders,CDC increased flu risk  MetabolicDisorders,,
+E71,T,E71,Disorders of branched-chain amino-acid metabolism,HighRiskMetabolicDisorders,CDC increased flu risk  MetabolicDisorders,,
+E72,T,E72,Other disorders of amino-acid metabolism,HighRiskMetabolicDisorders,CDC increased flu risk  MetabolicDisorders,,
+G3182,F,G31,Mitochondrial disease,HighRiskMetabolicDisorders,CDC increased flu risk  MetabolicDisorders,,
+E6601,F,E66,Morbid (severe) obesity due to excess calories,HighRiskObesity,CDC increased flu risk  Obesity,,
+E6609,F,E66,Other obesity due to excess calories,HighRiskObesity,CDC increased flu risk  Obesity,,
+B20,T,B20,HIV disease,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+C81,T,C81,Hodgkin lymphoma,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+C82,T,C82,Follicular lymphoma,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+C83,T,C83,Non-follicular lymphoma,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+C91,T,C91,Lymphoid leukemia,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+C92,T,C92,Myeloid leukemia,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+Z7952,F,Z79,Long-term (current) use of systemic steroids,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+Z7982,F,Z79,Long-term (current) use of immunosuppressive drugs,HighRiskWeakenedImmuneSystem,CDC increased flu risk  WeakenedImmuneSystem,,
+I63,T,I63,Cerebral infarction,HighRiskStroke,CDC increased flu risk  Stroke,,
+I64,T,I64,Stroke not specified as hemorrhage or infarction,HighRiskStroke,CDC increased flu risk  Stroke,,
+I693,F,I69,Sequelae of cerebral infarction,HighRiskStroke,CDC increased flu risk  Stroke,,
+G122,F,G12,Motor neuron disease,HighRiskDisabilitiesAffectingRespiration,CDC increased flu risk  DisabilitiesAffectingRespiration,,
+G80,T,G80,Cerebral palsy,HighRiskDisabilitiesAffectingRespiration,CDC increased flu risk  DisabilitiesAffectingRespiration,,
+G71,T,G71,Primary disorders of muscle,HighRiskDisabilitiesAffectingRespiration,CDC increased flu risk  DisabilitiesAffectingRespiration,,
+J986,F,J98,Diaphragmatic paralysis and respiratory insufficiency,HighRiskDisabilitiesAffectingRespiration,CDC increased flu risk  DisabilitiesAffectingRespiration,,
+Z331,F,Z33,Pregnant state  incidental,HighRiskFluPregnancy,CDC increased flu risk  pregnant,,
+Z34,T,Z34,Encounter for supervision of normal pregnancy,HighRiskFluPregnancy,CDC increased flu risk  pregnant,,
+Z3A,T,Z3A,Weeks of gestation,HighRiskFluPregnancy,CDC increased flu risk  pregnant,,
+O00,T,O00,Ectopic pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O01,T,O01,Hydatidiform mole,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O02,T,O02,Other abnormal products of conception,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O03,T,O03,Spontaneous abortion,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O04,T,O04,Complications following (induced) termination of pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O07,T,O07,Failed attempted termination of pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O08,T,O08,Complications following ectopic and molar pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O09,T,O09,Supervision of high risk pregnancy,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O10,T,O10,Pre-existing hypertension complicating pregnancy,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O11,T,O11,Pre-existing hypertension with pre-eclampsia,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O12,T,O12,Gestational edema and proteinuria without hypertension,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O13,T,O13,Gestational hypertension without significant proteinuria,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O14,T,O14,Pre-eclampsia,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O15,T,O15,Eclampsia,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O16,T,O16,Unspecified maternal hypertension,HighRiskPregnancy,ICD-10-CM (US) classification,,
+O20,T,O20,Hemorrhage in early pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O21,T,O21,Excessive vomiting in pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O22,T,O22,Venous complications and hemorrhoids in pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O23,T,O23,Infections of genitourinary tract in pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O24,T,O24,Gestational diabetes mellitus,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O25,T,O25,Malnutrition in pregnancy childbirth and the puerperium,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O26,T,O26,Maternal care for other conditions related to pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O28,T,O28,Abnormal findings on antenatal screening,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O29,T,O29,Complications of anesthesia during pregnancy,OtherMaternalDisorders,ICD-10-CM (US) classification,,
+O30,T,O30,Multiple gestation,LaborDelivery,ICD-10-CM (US) classification,,
+O31,T,O31,Complications specific to multiple gestation,LaborDelivery,ICD-10-CM (US) classification,,
+O32,T,O32,Maternal care for malpresentation of fetus,LaborDelivery,ICD-10-CM (US) classification,,
+O33,T,O33,Maternal care for disproportion,LaborDelivery,ICD-10-CM (US) classification,,
+O34,T,O34,Maternal care for abnormality of pelvic organs,LaborDelivery,ICD-10-CM (US) classification,,
+O35,T,O35,Maternal care for known or suspected fetal abnormality and damage,LaborDelivery,ICD-10-CM (US) classification,,
+O36,T,O36,Maternal care for other fetal problems,LaborDelivery,ICD-10-CM (US) classification,,
+O40,T,O40,Polyhydramnios,LaborDelivery,ICD-10-CM (US) classification,,
+O41,T,O41,Other disorders of amniotic fluid and membranes,LaborDelivery,ICD-10-CM (US) classification,,
+O42,T,O42,Premature rupture of membranes (PROM),LaborDelivery,ICD-10-CM (US) classification,,
+O43,T,O43,Placental disorders,LaborDelivery,ICD-10-CM (US) classification,,
+O44,T,O44,Placenta previa,LaborDelivery,ICD-10-CM (US) classification,,
+O45,T,O45,Premature separation of placenta [abruptio placentae],LaborDelivery,ICD-10-CM (US) classification,,
+O46,T,O46,Antepartum hemorrhage not elsewhere classified,LaborDelivery,ICD-10-CM (US) classification,,
+O47,T,O47,False labor,LaborDelivery,ICD-10-CM (US) classification,,
+O48,T,O48,Late pregnancy,LaborDelivery,ICD-10-CM (US) classification,,
+O60,T,O60,Preterm labor,LaborDelivery,ICD-10-CM (US) classification,,
+O61,T,O61,Failed induction of labor,LaborDelivery,ICD-10-CM (US) classification,,
+O62,T,O62,Abnormalities of forces of labor,LaborDelivery,ICD-10-CM (US) classification,,
+O63,T,O63,Long labor,LaborDelivery,ICD-10-CM (US) classification,,
+O64,T,O64,Obstructed labor due to malposition and malpresentation of fetus,LaborDelivery,ICD-10-CM (US) classification,,
+O65,T,O65,Obstructed labor due to maternal pelvic abnormality,LaborDelivery,ICD-10-CM (US) classification,,
+O66,T,O66,Other obstructed labor,LaborDelivery,ICD-10-CM (US) classification,,
+O67,T,O67,Labor and delivery complicated by intrapartum hemorrhage  not elsewhere classified,LaborDelivery,ICD-10-CM (US) classification,,
+O68,T,O68,Labor and delivery complicated by abnormality of fetal acid-base balance,LaborDelivery,ICD-10-CM (US) classification,,
+O69,T,O69,Labor and delivery complicated by umbilical cord complications,LaborDelivery,ICD-10-CM (US) classification,,
+O70,T,O70,Perineal laceration during delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O71,T,O71,Other obstetric trauma,LaborDelivery,ICD-10-CM (US) classification,,
+O72,T,O72,Postpartum hemorrhage,LaborDelivery,ICD-10-CM (US) classification,,
+O73,T,O73,Retained placenta and membranes  without hemorrhage,LaborDelivery,ICD-10-CM (US) classification,,
+O74,T,O74,Complications of anesthesia during labor and delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O75,T,O75,Other complications of labor and delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O76,T,O76,Abnormality in fetal heart rate and rhythm complicating labor and delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O77,T,O77,Other fetal stress complicating labor and delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O80,T,O80,Encounter for full-term uncomplicated delivery,LaborDelivery,ICD-10-CM (US) classification,,
+O82,T,O82,Encounter for cesarean delivery without indication,LaborDelivery,ICD-10-CM (US) classification,,
+O85,T,O85,Puerperal sepsis,Puerperium,ICD-10-CM (US) classification,,
+O86,T,O86,Other puerperal infections,Puerperium,ICD-10-CM (US) classification,,
+O87,T,O87,Venous complications and hemorrhoids in the puerperium,Puerperium,ICD-10-CM (US) classification,,
+O88,T,O88,Obstetric embolism,Puerperium,ICD-10-CM (US) classification,,
+O89,T,O89,Complications of anesthesia during the puerperium,Puerperium,ICD-10-CM (US) classification,,
+O90,T,O90,Complications of the puerperium  not elsewhere classified,Puerperium,ICD-10-CM (US) classification,,
+O91,T,O91,Infections of breast associated with pregnancy  the puerperium and lactation,Puerperium,ICD-10-CM (US) classification,,
+O92,T,O92,Other disorders of breast and disorders of lactation associated with pregnancy and the puerperium,Puerperium,ICD-10-CM (US) classification,,
+O94,T,O94,Sequelae of complication of pregnancy  childbirth  and the puerperium,OtherObstetric,ICD-10-CM (US) classification,,
+O98,T,O98,Maternal infectious and parasitic diseases classifiable elsewhere but complicating pregnancy  childbirth and the puerperium,OtherObstetric,ICD-10-CM (US) classification,,
+O99,T,O99,Other maternal diseases classifiable elsewhere but complicating pregnancy  childbirth and the puerperium,OtherObstetric,ICD-10-CM (US) classification,,
+O9A,T,O9A,Maternal malignant neoplasms  traumatic injuries and abuse classifiable elsewhere but complicating pregnancy  childbirth and the puerperium,OtherObstetric,ICD-10-CM (US) classification,,
