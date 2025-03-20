@@ -5,7 +5,7 @@
 #SBATCH -e clean_pudf.%j.e               # Name of stderr output file (%j expands to jobId)
 #SBATCH -p normal                        # Queue name, small is for <=2 nodes, normal 3+
 #SBATCH -N 2                  	         # Total number of nodes requested
-#SBATCH -n 34                            # Total number of tasks to run, Frontera was 56 cores/node (28 per socket)
+#SBATCH -n 36                            # Total number of tasks to run, Frontera was 56 cores/node (28 per socket)
 #SBATCH -t 48:00:00            	         # Run time (hh:mm:ss)
 #SBATCH -A IBN24016                      # Allocation name
 #SBATCH --mail-user=emjavan@utexas.edu   # Email for notifications

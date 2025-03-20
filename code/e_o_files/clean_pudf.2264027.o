@@ -1,0 +1,131 @@
+Launcher: Setup complete.
+
+------------- SUMMARY ---------------
+   Number of hosts:    2
+   Working directory:  /work/06778/emj976/ls6/hospital_catchment_estimation/code
+   Processes per host: 17
+   Total processes:    34
+   Total jobs:         36
+   Scheduling method:  interleaved
+
+-------------------------------------
+Launcher: Starting parallel tasks...
+Launcher: Task 1 running job 2 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2015Q4)
+Launcher: Task 14 running job 15 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2019Q3)
+Launcher: Task 24 running job 25 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2021Q1)
+Launcher: Task 0 running job 1 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2015Q3)
+Launcher: Task 3 running job 4 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2016Q4)
+Launcher: Task 26 running job 27 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2022Q3)
+Launcher: Task 6 running job 7 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2017Q3)
+Launcher: Task 13 running job 14 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2018Q2)
+Launcher: Task 11 running job 12 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2018Q4)
+Launcher: Task 12 running job 13 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2018Q1)
+Launcher: Task 15 running job 16 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2019Q4)
+Launcher: Task 29 running job 30 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2022Q2)
+Launcher: Task 23 running job 24 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2021Q4)
+Launcher: Task 31 running job 32 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2023Q4)
+Launcher: Task 9 running job 10 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2017Q2)
+Launcher: Task 17 running job 18 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2019Q2)
+Launcher: Task 20 running job 21 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2020Q1)
+Launcher: Task 30 running job 31 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2023Q3)
+Launcher: Task 2 running job 3 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2016Q3)
+Launcher: Task 8 running job 9 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2017Q1)
+Launcher: Task 18 running job 19 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2020Q3)
+Launcher: Task 33 running job 34 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2023Q2)
+Launcher: Task 28 running job 29 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2022Q1)
+Launcher: Task 16 running job 17 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2019Q1)
+Launcher: Task 4 running job 5 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2016Q1)
+Launcher: Task 10 running job 11 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2018Q3)
+Launcher: Task 22 running job 23 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2021Q3)
+Launcher: Task 21 running job 22 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2020Q2)
+Launcher: Task 27 running job 28 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2022Q4)
+Launcher: Task 5 running job 6 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2016Q2)
+Launcher: Task 7 running job 8 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2017Q4)
+Launcher: Task 19 running job 20 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2020Q4)
+Launcher: Task 25 running job 26 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2021Q2)
+Launcher: Task 32 running job 33 on c309-011.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2023Q1)
+Launcher: Job 27 completed in 16 seconds.
+Launcher: Task 26 done. Exiting.
+Launcher: Job 30 completed in 15 seconds.
+Launcher: Job 18 completed in 13 seconds.
+Launcher: Task 17 done. Exiting.
+Launcher: Task 29 done. Exiting.
+Launcher: Job 28 completed in 10 seconds.
+Launcher: Job 32 completed in 14 seconds.
+Launcher: Job 20 completed in 9 seconds.
+Launcher: Job 22 completed in 10 seconds.
+Launcher: Task 27 done. Exiting.
+Launcher: Task 19 done. Exiting.
+Launcher: Task 31 done. Exiting.
+Launcher: Task 21 done. Exiting.
+Launcher: Job 25 completed in 17 seconds.
+Launcher: Job 21 completed in 13 seconds.
+Launcher: Job 23 completed in 10 seconds.
+Launcher: Task 20 done. Exiting.
+Launcher: Task 22 done. Exiting.
+Launcher: Task 24 done. Exiting.
+Launcher: Job 31 completed in 13 seconds.
+Launcher: Job 34 completed in 12 seconds.
+Launcher: Job 19 completed in 12 seconds.
+Launcher: Job 29 completed in 12 seconds.
+Launcher: Job 33 completed in 9 seconds.
+Launcher: Job 26 completed in 9 seconds.
+Launcher: Task 30 done. Exiting.
+Launcher: Task 33 done. Exiting.
+Launcher: Task 18 done. Exiting.
+Launcher: Task 28 done. Exiting.
+Launcher: Task 32 done. Exiting.
+Launcher: Task 25 done. Exiting.
+Launcher: Job 24 completed in 14 seconds.
+Launcher: Task 23 done. Exiting.
+Elapsed Time: 23746.09  sec
+Launcher: Job 4 completed in 23769 seconds.
+Launcher: Task 3 done. Exiting.
+Elapsed Time: 23949.31  sec
+Launcher: Job 3 completed in 23966 seconds.
+Launcher: Task 2 done. Exiting.
+Elapsed Time: 24022.51  sec
+Launcher: Job 7 completed in 24044 seconds.
+Launcher: Task 6 done. Exiting.
+Elapsed Time: 24242.69  sec
+Launcher: Job 5 completed in 24258 seconds.
+Launcher: Task 4 done. Exiting.
+Elapsed Time: 24370.54  sec
+Launcher: Job 2 completed in 24393 seconds.
+Launcher: Task 1 running job 36 on c307-013.ls6.tacc.utexas.edu (time apptainer exec ../../r_tidycensus_geo.sif Rscript -e '.libPaths(c("/usr/local/lib/R/site-library", "/usr/local/lib/R/library")); source("run_estimation_fns.R")' 2024Q2)
+Elapsed Time: 25326.03  sec
+Launcher: Job 9 completed in 25343 seconds.
+Launcher: Task 8 done. Exiting.
+Elapsed Time: 25460.53  sec
+Launcher: Job 6 completed in 25475 seconds.
+Launcher: Task 5 done. Exiting.
+Elapsed Time: 25477.11  sec
+Launcher: Job 14 completed in 25497 seconds.
+Launcher: Task 13 done. Exiting.
+Elapsed Time: 25546.47  sec
+Launcher: Job 10 completed in 25565 seconds.
+Launcher: Task 9 done. Exiting.
+Elapsed Time: 26595.79  sec
+Launcher: Job 17 completed in 26612 seconds.
+Launcher: Task 16 done. Exiting.
+Elapsed Time: 27033.19  sec
+Launcher: Job 15 completed in 27055 seconds.
+Launcher: Task 14 done. Exiting.
+Elapsed Time: 27201.56  sec
+Launcher: Job 11 completed in 27217 seconds.
+Launcher: Task 10 done. Exiting.
+Elapsed Time: 27284.1  sec
+Launcher: Job 12 completed in 27304 seconds.
+Launcher: Task 11 done. Exiting.
+Elapsed Time: 27353.55  sec
+Launcher: Job 8 completed in 27368 seconds.
+Launcher: Task 7 done. Exiting.
+Elapsed Time: 27804.06  sec
+Launcher: Job 13 completed in 27826 seconds.
+Launcher: Task 12 done. Exiting.
+Elapsed Time: 30067.21  sec
+Launcher: Job 16 completed in 30088 seconds.
+Launcher: Task 15 done. Exiting.
+Elapsed Time: 29640.33  sec
+Launcher: Job 36 completed in 29668 seconds.
+Launcher: Task 1 done. Exiting.
