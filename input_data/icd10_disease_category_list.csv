@@ -70,7 +70,7 @@ Z34,T,Z34,Encounter for supervision of normal pregnancy,HighRiskFluPregnancy,CDC
 Z3A,T,Z3A,Weeks of gestation,HighRiskFluPregnancy,CDC increased flu risk  pregnant,,
 O00,T,O00,Ectopic pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
 O01,T,O01,Hydatidiform mole,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
-O02,T,O02,Other abnormal products of conception,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
+O02,T,O02,Threatened abortion likely vaginal bleeding,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
 O03,T,O03,Spontaneous abortion,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
 O04,T,O04,Complications following (induced) termination of pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
 O07,T,O07,Failed attempted termination of pregnancy,PregnancyAbortiveOutcome,ICD-10-CM (US) classification,,
